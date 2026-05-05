@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MineDebug · Tecnologia para mineração</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="icon" href="../assets/logo.svg">
+<style>
+  /* ===== Light (default) ===== */
+  :root {
+    --page-bg: #FFFFFF;
+    --page-bg-2: #F7F8FA;
+    --page-fg: #0A0A0A;
+    --page-fg-2: #353B45;
+    --page-fg-3: #5A626E;
+    --page-border: #E6E9ED;
+    --page-card: #FFFFFF;
+    --hero-bg: #0A0A0A;
+    --hero-fg: #FFFFFF;
+  }
+  [data-theme="dark"] {
+    --page-bg: #0A0A0A;
+    --page-bg-2: #111418;
+    --page-fg: #FFFFFF;
+    --page-fg-2: #DDE1E6;
+    --page-fg-3: #B9BFC8;
+    --page-border: #232830;
+    --page-card: #181C22;
+    --hero-bg: #000000;
+    --hero-fg: #FFFFFF;
+  }
+
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--page-bg); color: var(--page-fg); font-family: var(--font-sans); transition: background 200ms, color 200ms; }
+
+  /* ===== Nav ===== */
+  .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--page-bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--page-border); }
+  .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 32px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+  .nav-brand img { width: 32px; height: 32px; }
+  .nav-brand .wm { font-family: var(--font-mono); font-weight: 700; font-size: 15px; letter-spacing: .04em; }
+  .nav-brand .wm span { color: var(--md-green-500); }
+  .nav-links { display: flex; gap: 4px; flex: 1; }
+  .nav-links a { font-size: 14px; padding: 8px 14px; border-radius: 4px; color: var(--page-fg-2); text-decoration: none; font-weight: 500; }
+  .nav-links a:hover { background: var(--page-bg-2); color: var(--page-fg); }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .theme-toggle { width: 38px; height: 38px; border-radius: 4px; border: 1px solid var(--page-border); background: transparent; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: var(--page-fg-2); transition: all 120ms; }
+  .theme-toggle:hover { border-color: var(--md-green-500); color: var(--md-green-500); }
+  .theme-toggle i { width: 16px; height: 16px; }
+  .btn { font-family: var(--font-sans); font-weight: 600; font-size: 14px; border-radius: 4px; padding: 9px 16px; border: 1px solid transparent; cursor: pointer; transition: all 120ms; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .btn-primary { background: var(--md-green-500); color: var(--md-black); }
+  .btn-primary:hover { background: var(--md-green-400); }
+  .btn-ghost { background: transparent; color: var(--page-fg); border-color: var(--page-border); }
+  .btn-ghost:hover { border-color: var(--page-fg-2); }
+  .btn i { width: 14px; height: 14px; }
+
+  /* ===== Hero ===== */
+  .hero { background: var(--hero-bg); color: var(--hero-fg); position: relative; overflow: hidden; }
+  .hero::before { content: ""; position: absolute; inset: 0; background-image: url(../assets/equipamento.jpeg); background-size: cover; background-position: center; opacity: .35; filter: grayscale(.2) contrast(1.05); }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,10,10,.55) 0%, rgba(10,10,10,.85) 100%); }
+  .hero-inner { position: relative; max-width: 1200px; margin: 0 auto; padding: 96px 32px 112px; display: grid; grid-template-columns: 1fr 360px; gap: 48px; align-items: end; }
+  .hero-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--md-green-500); font-weight: 600; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 8px; }
+  .hero-eyebrow::before { content: ""; width: 24px; height: 1px; background: var(--md-green-500); }
+  .hero h1 { font-size: clamp(40px, 5vw, 64px); font-weight: 800; line-height: 1.02; letter-spacing: -.025em; margin: 0 0 20px; max-width: 780px; }
+  .hero h1 .accent { color: var(--md-green-500); }
+  .hero p { font-size: 18px; line-height: 1.55; color: #DDE1E6; max-width: 600px; margin: 0 0 32px; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-stats { display: grid; gap: 20px; }
+  .stat { padding: 16px 0; border-top: 1px solid rgba(255,255,255,.15); }
+  .stat .v { font-family: var(--font-mono); font-size: 32px; font-weight: 700; color: var(--md-green-500); letter-spacing: -.01em; }
+  .stat .v .u { color: #B9BFC8; font-size: 16px; font-weight: 400; }
+  .stat .l { font-size: 12px; color: #B9BFC8; letter-spacing: .04em; margin-top: 4px; }
+
+  /* ===== Sections ===== */
+  section { padding: 96px 0; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+  .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--md-green-600); font-weight: 600; }
+  [data-theme="dark"] .eyebrow { color: var(--md-green-500); }
+  .section-head { display: grid; grid-template-columns: 1fr 1.5fr; gap: 64px; margin-bottom: 56px; align-items: end; }
+  .section-head h2 { font-size: clamp(32px, 3.5vw, 44px); font-weight: 700; letter-spacing: -.02em; line-height: 1.05; margin: 12px 0 0; }
+  .section-head p { color: var(--page-fg-3); font-size: 17px; line-height: 1.55; max-width: 520px; margin: 0; }
+
+  /* ===== O que fazemos ===== */
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--page-border); border: 1px solid var(--page-border); border-radius: 8px; overflow: hidden; }
+  .svc { background: var(--page-card); padding: 32px; display: flex; flex-direction: column; gap: 16px; min-height: 260px; }
+  .svc-icon { width: 44px; height: 44px; border-radius: 4px; background: rgba(25,226,122,.1); color: var(--md-green-600); display: flex; align-items: center; justify-content: center; }
+  [data-theme="dark"] .svc-icon { color: var(--md-green-500); }
+  .svc-icon i { width: 22px; height: 22px; }
+  .svc h3 { font-size: 20px; font-weight: 700; margin: 0; }
+  .svc p { font-size: 14px; color: var(--page-fg-3); margin: 0; line-height: 1.55; flex: 1; }
+  .svc-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--page-fg-3); }
+
+  /* ===== Mission/Vision/Values ===== */
+  .mvv-section { background: var(--page-bg-2); border-top: 1px solid var(--page-border); border-bottom: 1px solid var(--page-border); }
+  .mvv { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; }
+  .mvv-card { background: var(--page-card); border: 1px solid var(--page-border); border-radius: 8px; padding: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .mvv-num { font-family: var(--font-mono); font-size: 11px; color: var(--md-green-600); letter-spacing: .12em; font-weight: 600; }
+  [data-theme="dark"] .mvv-num { color: var(--md-green-500); }
+  .mvv-card h3 { font-size: 22px; margin: 0; font-weight: 700; }
+  .mvv-card p { color: var(--page-fg-2); font-size: 15px; line-height: 1.6; margin: 0; }
+  .values-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .values-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: var(--page-fg-2); }
+  .values-list li::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--md-green-500); margin-top: 8px; flex: none; }
+  .values-list strong { color: var(--page-fg); display: block; font-weight: 600; margin-bottom: 2px; }
+
+  /* ===== Team ===== */
+  .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .team-card { background: var(--page-card); border: 1px solid var(--page-border); border-radius: 8px; padding: 20px; transition: all 200ms; }
+  .team-card:hover { border-color: var(--md-green-500); box-shadow: 0 8px 24px rgba(25,226,122,.08); }
+  .team-avatar { width: 56px; height: 56px; border-radius: 999px; background: linear-gradient(135deg, var(--md-green-500), var(--md-green-600)); color: var(--md-black); font-family: var(--font-mono); font-weight: 700; font-size: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .team-card h4 { font-size: 15px; font-weight: 700; margin: 0 0 4px; line-height: 1.3; }
+  .team-role { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--md-green-600); font-weight: 600; margin-bottom: 12px; }
+  [data-theme="dark"] .team-role { color: var(--md-green-500); }
+  .team-bio { font-size: 13px; color: var(--page-fg-3); line-height: 1.5; margin: 0 0 14px; }
+  .team-link { font-size: 12px; color: var(--page-fg-3); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .team-link:hover { color: var(--md-green-600); }
+  [data-theme="dark"] .team-link:hover { color: var(--md-green-500); }
+  .team-link i { width: 12px; height: 12px; }
+  .team-section .lead-row { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 4px; }
+  .team-card.lead { background: var(--page-fg); color: #fff; border-color: var(--page-fg); }
+  .team-card.lead h4, .team-card.lead .team-bio { color: #fff; }
+  .team-card.lead .team-bio { color: #B9BFC8; }
+  .team-card.lead .team-link { color: #B9BFC8; }
+  .team-card.lead:hover { box-shadow: 0 12px 32px rgba(25,226,122,.18); }
+
+  /* ===== CTA ===== */
+  .cta { background: var(--md-black); color: #fff; }
+  .cta .container { display: grid; grid-template-columns: 1.5fr 1fr; gap: 64px; align-items: center; }
+  .cta h2 { font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; margin: 16px 0 16px; }
+  .cta h2 .accent { color: var(--md-green-500); }
+  .cta p { color: #B9BFC8; font-size: 17px; line-height: 1.55; margin: 0 0 32px; }
+  .cta-info { background: #181C22; border: 1px solid #232830; border-radius: 8px; padding: 24px; }
+  .cta-info-row { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #232830; align-items: center; font-size: 13px; }
+  .cta-info-row:last-child { border-bottom: none; }
+  .cta-info-row i { width: 16px; height: 16px; color: var(--md-green-500); flex: none; }
+  .cta-info-row span { color: #B9BFC8; min-width: 80px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+  .cta-info-row strong { color: #fff; font-weight: 600; }
+
+  /* ===== Footer ===== */
+  footer { background: var(--page-bg-2); border-top: 1px solid var(--page-border); padding: 48px 0 32px; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; }
+  .footer-brand img { width: 36px; height: 36px; margin-bottom: 12px; }
+  .footer-brand p { color: var(--page-fg-3); font-size: 13px; line-height: 1.6; max-width: 320px; }
+  .footer-col h5 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--page-fg-3); margin: 0 0 14px; font-weight: 600; }
+  .footer-col a { display: block; color: var(--page-fg-2); font-size: 13px; text-decoration: none; padding: 4px 0; }
+  .footer-col a:hover { color: var(--md-green-600); }
+  [data-theme="dark"] .footer-col a:hover { color: var(--md-green-500); }
+  .footer-bottom { max-width: 1200px; margin: 32px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--page-border); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--page-fg-3); letter-spacing: .04em; }
+
+  @media (max-width: 900px) {
+    .hero-inner, .section-head, .services, .mvv, .team-grid, .team-section .lead-row, .cta .container, .footer-inner { grid-template-columns: 1fr !important; }
+    .hero-stats { display: flex; gap: 24px; flex-wrap: wrap; }
+    .stat { flex: 1; min-width: 140px; }
+  }
+</style>
+</head>
+<body data-screen-label="01 Landing Page">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <img src="../assets/logo.svg" alt="">
+      <span class="wm">MINE<span>DEBUG</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#solucoes">Soluções</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#contato">Contato</a>
+    </div>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+        <i data-lucide="moon" id="themeIcon"></i>
+      </button>
+      <a class="btn btn-ghost" href="login.html"><i data-lucide="lock"></i>Acessar painel</a>
+      <a class="btn btn-primary" href="#contato">Fale conosco</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">TECNOLOGIA APLICADA À MINERAÇÃO</div>
+      <h1>Menos diesel. <br>Mais <span class="accent">eficiência</span> em cada caminhão.</h1>
+      <p>Sensores embarcados, sistemas de dosagem e telemetria em tempo real para reduzir consumo e emissões em equipamentos pesados de mineração.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contato"><i data-lucide="arrow-right"></i>Solicitar demonstração</a>
+        <a class="btn btn-ghost" href="#solucoes" style="color:#fff;border-color:rgba(255,255,255,.25)">Conheça as soluções</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="v">−14<span class="u">%</span></div><div class="l">CONSUMO MÉDIO DE DIESEL</div></div>
+      <div class="stat"><div class="v">24/7</div><div class="l">MONITORAMENTO EM CAMPO</div></div>
+      <div class="stat"><div class="v">100<span class="u">+</span></div><div class="l">EQUIPAMENTOS INSTRUMENTADOS</div></div>
+    </div>
+  </div>
+</header>
+
+<section id="solucoes">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">SOLUÇÕES</span>
+        <h2>O que fazemos</h2>
+      </div>
+      <p>Combinamos hardware embarcado, IoT industrial e analytics para entregar resultados mensuráveis em descarbonização e eficiência operacional.</p>
+    </div>
+    <div class="services">
+      <div class="svc">
+        <div class="svc-icon"><i data-lucide="leaf"></i></div>
+        <span class="svc-tag">DESCARBONIZAÇÃO</span>
+        <h3>Redução de diesel & CO₂</h3>
+        <p>Sistemas de dosagem e otimização de combustão que reduzem consumo de diesel e emissões em caminhões fora-de-estrada e escavadeiras.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon"><i data-lucide="cpu"></i></div>
+        <span class="svc-tag">SISTEMAS EMBARCADOS</span>
+        <h3>Sensores & IoT industrial</h3>
+        <p>Hardware projetado para o ambiente de mina — vibração, poeira, calor — com telemetria em tempo real via gateway dedicado.</p>
+      </div>
+      <div class="svc">
+        <div class="svc-icon"><i data-lucide="activity"></i></div>
+        <span class="svc-tag">MONITORAMENTO</span>
+        <h3>Painel de operações</h3>
+        <p>Dashboard de frota com consumo, status de sensores, alertas críticos e relatórios de redução de emissões para o time ESG.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mvv-section" id="sobre">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">QUEM SOMOS</span>
+        <h2>Missão, visão e valores</h2>
+      </div>
+      <p>Somos uma empresa de tecnologia industrial brasileira que ajuda mineradoras a operar com menos diesel, menos emissões e mais inteligência em campo.</p>
+    </div>
+    <div class="mvv">
+      <div class="mvv-card">
+        <span class="mvv-num">01 / MISSÃO</span>
+        <h3>Missão</h3>
+        <p>Acelerar a descarbonização da mineração com tecnologia embarcada acessível, mensurável e robusta o suficiente para o ambiente da mina.</p>
+      </div>
+      <div class="mvv-card">
+        <span class="mvv-num">02 / VISÃO</span>
+        <h3>Visão</h3>
+        <p>Ser a referência latino-americana em sistemas embarcados e monitoramento inteligente para equipamentos pesados — presente em cada operação que se compromete com o net-zero.</p>
+      </div>
+      <div class="mvv-card">
+        <span class="mvv-num">03 / VALORES</span>
+        <h3>Valores</h3>
+        <ul class="values-list">
+          <li><div><strong>Engenharia mensurável</strong>Resultados em números, não em adjetivos.</div></li>
+          <li><div><strong>Robustez de campo</strong>Tecnologia que funciona na poeira, no calor e na vibração.</div></li>
+          <li><div><strong>Transparência técnica</strong>Dados abertos para o cliente, sem caixa-preta.</div></li>
+          <li><div><strong>Compromisso com o operador</strong>Quem vive a mina é quem usa o produto.</div></li>
+          <li><div><strong>Sustentabilidade pragmática</strong>Descarbonização que cabe no plano de investimento.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="team-section" id="equipe">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">EQUIPE</span>
+        <h2>Quem está por trás da MineDebug</h2>
+      </div>
+      <p>Engenheiros, pesquisadores e operadores com experiência prática em mineração, automação industrial e P&amp;D aplicado.</p>
+    </div>
+
+    <div class="team-grid">
+      <!-- Liderança -->
+      <div class="team-card lead">
+        <div class="team-avatar">RB</div>
+        <h4>Ray Basílio</h4>
+        <div class="team-role" style="color:var(--md-green-500)">CEO &amp; CO-FOUNDER</div>
+        <p class="team-bio">Lidera a estratégia da MineDebug e o relacionamento com mineradoras parceiras.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/ray-basilio/?locale=pt" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+      <div class="team-card lead">
+        <div class="team-avatar">AK</div>
+        <h4>Alan Kardek Rego Segundo</h4>
+        <div class="team-role" style="color:var(--md-green-500)">CTO · DIRETOR DE TECNOLOGIA</div>
+        <p class="team-bio">Responsável pela arquitetura de sistemas embarcados e roadmap técnico.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/alan-kardek-rego-segundo-224ba21b9/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+      <div class="team-card lead">
+        <div class="team-avatar">EP</div>
+        <h4>Erica Pinto</h4>
+        <div class="team-role" style="color:var(--md-green-500)">COO · DIRETORA DE OPERAÇÕES</div>
+        <p class="team-bio">Coordena instalação em campo, operação e suporte aos clientes mineradores.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/erica-pinto-01244571/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+      <div class="team-card lead">
+        <div class="team-avatar">CA</div>
+        <h4>Carlos Enrique Arroyo Ortiz</h4>
+        <div class="team-role" style="color:var(--md-green-500)">DIRETOR DE P&amp;D</div>
+        <p class="team-bio">Lidera pesquisa aplicada em descarbonização e processos minerários.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/carlos-enrique-arroyo-ortiz-a0b03251/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+
+      <!-- Engenharia / Inovação -->
+      <div class="team-card">
+        <div class="team-avatar">AG</div>
+        <h4>Alex Júnior Guimarães</h4>
+        <div class="team-role">ENG. DE SISTEMAS EMBARCADOS</div>
+        <p class="team-bio">Desenvolve firmware e hardware dos sensores instalados em equipamentos pesados.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/alex-j%C3%BAnior-guimar%C3%A3es-aaa34b203/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">ID</div>
+        <h4>Iuri Diniz</h4>
+        <div class="team-role">ENG. DE INOVAÇÃO &amp; IoT</div>
+        <p class="team-bio">Trabalha em integração IoT, gateways de campo e plataforma de telemetria.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/iuri-s-diniz/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">RF</div>
+        <h4>Robson Figueiredo</h4>
+        <div class="team-role">ENG. DE CAMPO &amp; AUTOMAÇÃO</div>
+        <p class="team-bio">Conduz instalações em mina, comissionamento e validação de equipamentos em operação.</p>
+        <a class="team-link" href="https://www.linkedin.com/in/robson-figueiredo-2b565872/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
+      </div>
+      <div class="team-card" style="background:transparent;border-style:dashed">
+        <div class="team-avatar" style="background:var(--page-bg-2);color:var(--page-fg-3)"><i data-lucide="user-plus" style="width:20px;height:20px"></i></div>
+        <h4 style="color:var(--page-fg-3)">Junte-se ao time</h4>
+        <div class="team-role" style="color:var(--page-fg-3)">VAGAS ABERTAS</div>
+        <p class="team-bio">Buscamos engenheiros de hardware, firmware e dados apaixonados por mineração e descarbonização.</p>
+        <a class="team-link" href="#contato"><i data-lucide="arrow-right"></i>Ver oportunidades</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contato">
+  <div class="container">
+    <div>
+      <span class="eyebrow" style="color:var(--md-green-500)">CONTATO</span>
+      <h2>Vamos reduzir seu <span class="accent">consumo de diesel</span>?</h2>
+      <p>Agende uma demonstração técnica. Apresentamos resultados de campo, casos reais e a arquitetura do nosso sistema embarcado.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn-primary" href="mailto:contato@minedebug.com.br"><i data-lucide="mail"></i>Solicitar demonstração</a>
+        <a class="btn btn-ghost" href="login.html" style="color:#fff;border-color:rgba(255,255,255,.25)"><i data-lucide="lock"></i>Acessar painel</a>
+      </div>
+    </div>
+    <div class="cta-info">
+      <div class="cta-info-row"><i data-lucide="map-pin"></i><span>SEDE</span><strong>Ouro Preto · MG</strong></div>
+      <div class="cta-info-row"><i data-lucide="mail"></i><span>EMAIL</span><strong>contato@minedebug.com.br</strong></div>
+      <div class="cta-info-row"><i data-lucide="phone"></i><span>TELEFONE</span><strong>+55 (31) 0000-0000</strong></div>
+      <div class="cta-info-row"><i data-lucide="clock"></i><span>SUPORTE</span><strong>24/7 para clientes ativos</strong></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="../assets/logo.svg" alt="">
+      <p>MineDebug Technology — sistemas embarcados, IoT e descarbonização para mineração de grande porte.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Produto</h5>
+      <a href="#solucoes">Soluções</a>
+      <a href="login.html">Painel de operações</a>
+      <a href="#">Documentação</a>
+    </div>
+    <div class="footer-col">
+      <h5>Empresa</h5>
+      <a href="#sobre">Sobre</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#">Carreiras</a>
+    </div>
+    <div class="footer-col">
+      <h5>Legal</h5>
+      <a href="#">Privacidade</a>
+      <a href="#">Termos</a>
+      <a href="#">LGPD</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 MINEDEBUG TECHNOLOGY</span>
+    <span>BUILT IN BRASIL · OURO PRETO/MG</span>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script>
+  // Theme toggle
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const icon = document.getElementById('themeIcon');
+  function setTheme(t) {
+    if (t === 'dark') { root.setAttribute('data-theme','dark'); icon.setAttribute('data-lucide','sun'); }
+    else { root.removeAttribute('data-theme'); icon.setAttribute('data-lucide','moon'); }
+    localStorage.setItem('md-theme', t);
+    if (window.lucide) lucide.createIcons();
+  }
+  const saved = localStorage.getItem('md-theme') || 'light';
+  setTheme(saved);
+  btn.addEventListener('click', () => {
+    setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

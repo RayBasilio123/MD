@@ -1,0 +1,265 @@
+/* =====================================================================
+   MineDebug Design System — Colors & Type
+   Industrial mining-tech brand: rugged, technical, high-contrast.
+   Anchor palette comes from the logo: deep black + neon "debug" green.
+   ===================================================================== */
+
+/* ---------- Fonts (Google substitutes — see README) ---------- */
+/* Display / brand: JetBrains Mono — technical, monospaced, "code/debug" feel */
+/* UI / body:      Inter — neutral industrial sans, excellent at small sizes  */
+/* Numerals:       JetBrains Mono — tabular, for telemetry & dashboards      */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  /* =========================================================
+     COLOR — RAW PALETTE
+     ========================================================= */
+
+  /* Brand */
+  --md-green-500: #19E27A;     /* Primary brand green — from logo */
+  --md-green-400: #34F092;     /* Hover / lighter accent */
+  --md-green-600: #10B962;     /* Pressed / darker accent */
+  --md-green-300: #7CF5B5;     /* Soft fill / chip */
+  --md-green-100: #E2FBEE;     /* Tint background */
+  --md-green-glow: rgba(25, 226, 122, 0.35); /* Outer glow / focus ring */
+
+  /* Neutrals — industrial slate, slightly cool */
+  --md-black:     #0A0A0A;     /* True near-black (logo bg) */
+  --md-ink-900:   #111418;     /* App bg dark */
+  --md-ink-800:   #181C22;     /* Surface dark */
+  --md-ink-700:   #232830;     /* Elevated surface dark */
+  --md-ink-600:   #353B45;     /* Border on dark */
+  --md-ink-500:   #5A626E;     /* Muted text on dark */
+  --md-ink-400:   #8A929E;     /* Secondary text */
+  --md-ink-300:   #B9BFC8;     /* Tertiary / disabled */
+  --md-ink-200:   #DDE1E6;     /* Hairline */
+  --md-ink-100:   #EFF1F4;     /* Subtle bg on light */
+  --md-ink-050:   #F7F8FA;     /* Page bg on light */
+  --md-white:     #FFFFFF;
+
+  /* Semantic — operational status (mining ops live & breathe these) */
+  --md-success:   #19E27A;     /* Aligns with brand green */
+  --md-warning:   #F5B73A;     /* Caution amber — "diesel/heat" */
+  --md-danger:    #F25C54;     /* Alarm red */
+  --md-info:      #4DA3FF;     /* Telemetry blue */
+
+  /* Field accent — borrowed from real-world field imagery */
+  --md-hi-vis:    #E5F03A;     /* Hi-vis vest yellow — for safety callouts */
+  --md-rust:      #B25A2E;     /* Iron-ore / mud — used for warm tints */
+
+  /* =========================================================
+     COLOR — SEMANTIC (light surface, default)
+     ========================================================= */
+  --bg:           var(--md-ink-050);
+  --bg-elev:      var(--md-white);
+  --bg-sunk:      var(--md-ink-100);
+  --surface:      var(--md-white);
+  --surface-2:    var(--md-ink-050);
+  --border:       var(--md-ink-200);
+  --border-strong:var(--md-ink-300);
+  --hairline:     #E6E9ED;
+
+  --fg-1:         var(--md-ink-900);   /* Primary text */
+  --fg-2:         var(--md-ink-700);   /* Body */
+  --fg-3:         var(--md-ink-500);   /* Muted */
+  --fg-4:         var(--md-ink-400);   /* Tertiary */
+  --fg-on-accent: var(--md-black);     /* Text on green */
+  --fg-on-dark:   var(--md-white);
+
+  --accent:       var(--md-green-500);
+  --accent-fg:    var(--md-black);
+  --accent-hover: var(--md-green-400);
+  --accent-press: var(--md-green-600);
+  --focus-ring:   var(--md-green-glow);
+
+  /* Status semantic */
+  --status-ok:    var(--md-success);
+  --status-warn:  var(--md-warning);
+  --status-err:   var(--md-danger);
+  --status-info:  var(--md-info);
+
+  /* =========================================================
+     TYPOGRAPHY
+     ========================================================= */
+  --font-display: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Type scale — industrial, slightly tighter than consumer */
+  --t-display:    clamp(40px, 6vw, 72px);
+  --t-h1:         clamp(32px, 4vw, 48px);
+  --t-h2:         32px;
+  --t-h3:         24px;
+  --t-h4:         18px;
+  --t-body:       16px;
+  --t-body-sm:    14px;
+  --t-caption:    12px;
+  --t-micro:      11px;
+
+  --lh-tight:     1.05;
+  --lh-snug:      1.2;
+  --lh-normal:    1.5;
+  --lh-loose:     1.7;
+
+  --tracking-tight:  -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.06em;
+  --tracking-mono:   0.02em;
+
+  /* =========================================================
+     SPACING — 4px grid
+     ========================================================= */
+  --s-0:  0;
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+
+  /* =========================================================
+     RADII — small. Industrial hardware aesthetic.
+     ========================================================= */
+  --r-0:    0;
+  --r-1:    2px;
+  --r-2:    4px;
+  --r-3:    8px;
+  --r-4:    12px;     /* cards max */
+  --r-pill: 999px;
+
+  /* =========================================================
+     SHADOWS / ELEVATION — subtle, with a hint of green glow on accents
+     ========================================================= */
+  --shadow-1: 0 1px 2px rgba(10,10,10,.06), 0 1px 1px rgba(10,10,10,.04);
+  --shadow-2: 0 4px 12px rgba(10,10,10,.08), 0 2px 4px rgba(10,10,10,.04);
+  --shadow-3: 0 12px 32px rgba(10,10,10,.12), 0 4px 8px rgba(10,10,10,.06);
+  --shadow-glow: 0 0 0 4px var(--md-green-glow);
+  --shadow-inset: inset 0 1px 0 rgba(255,255,255,.04), inset 0 -1px 0 rgba(0,0,0,.2);
+
+  /* =========================================================
+     BORDERS
+     ========================================================= */
+  --border-width: 1px;
+  --border-width-strong: 2px;
+
+  /* =========================================================
+     MOTION
+     ========================================================= */
+  --ease-out:    cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --d-fast:      120ms;
+  --d-base:      200ms;
+  --d-slow:      320ms;
+}
+
+/* =========================================================
+   DARK SURFACE — operational dashboards / control rooms
+   Apply via [data-theme="dark"] on root or any container
+   ========================================================= */
+[data-theme="dark"] {
+  --bg:           var(--md-ink-900);
+  --bg-elev:      var(--md-ink-800);
+  --bg-sunk:      var(--md-black);
+  --surface:      var(--md-ink-800);
+  --surface-2:    var(--md-ink-700);
+  --border:       var(--md-ink-600);
+  --border-strong: var(--md-ink-500);
+  --hairline:     #20252C;
+
+  --fg-1:         var(--md-white);
+  --fg-2:         var(--md-ink-200);
+  --fg-3:         var(--md-ink-300);
+  --fg-4:         var(--md-ink-400);
+
+  --shadow-1: 0 1px 2px rgba(0,0,0,.4);
+  --shadow-2: 0 4px 12px rgba(0,0,0,.45);
+  --shadow-3: 0 12px 32px rgba(0,0,0,.55);
+}
+
+/* =========================================================
+   SEMANTIC ELEMENTS
+   ========================================================= */
+body {
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: var(--lh-normal);
+  color: var(--fg-1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.t-display, h1.display {
+  font-family: var(--font-display);
+  font-size: var(--t-display);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+}
+
+h1, .t-h1 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h1);
+  font-weight: 800;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2, .t-h2 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h2);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+}
+
+h3, .t-h3 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h3);
+  font-weight: 700;
+  line-height: var(--lh-snug);
+}
+
+h4, .t-h4 {
+  font-family: var(--font-sans);
+  font-size: var(--t-h4);
+  font-weight: 600;
+  line-height: var(--lh-snug);
+}
+
+p, .t-body {
+  font-size: var(--t-body);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+}
+
+.t-body-sm  { font-size: var(--t-body-sm); line-height: var(--lh-normal); }
+.t-caption  { font-size: var(--t-caption); color: var(--fg-3); }
+.t-micro    { font-size: var(--t-micro); color: var(--fg-3); letter-spacing: var(--tracking-wide); text-transform: uppercase; font-weight: 600; }
+
+/* Eyebrow / label — used heavily in industrial UI */
+.t-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--t-caption);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.t-mono, code, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  letter-spacing: var(--tracking-mono);
+}
+
+/* Tabular numerals — telemetry */
+.t-num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}

@@ -1,0 +1,21 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><style>
+body{margin:0;padding:24px;background:#0A0A0A;font-family:var(--font-sans);color:#fff}
+.row{display:flex;gap:12px;align-items:stretch}
+.alert{display:flex;gap:12px;padding:14px 16px;border-radius:8px;border:1px solid;font-family:var(--font-sans);font-size:13px;flex:1}
+.alert .icon{font-family:var(--font-mono);font-weight:700;font-size:14px;width:24px;height:24px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex:none}
+.alert .body{display:flex;flex-direction:column;gap:2px}
+.alert .t{font-weight:600;font-size:13px}
+.alert .d{font-size:12px;opacity:.7;font-family:var(--font-mono)}
+.ok{background:rgba(25,226,122,.08);border-color:rgba(25,226,122,.4);color:#7CF5B5}
+.ok .icon{background:#19E27A;color:#0A0A0A}
+.warn{background:rgba(245,183,58,.08);border-color:rgba(245,183,58,.4);color:#F5C97A}
+.warn .icon{background:#F5B73A;color:#0A0A0A}
+.err{background:rgba(242,92,84,.08);border-color:rgba(242,92,84,.5);color:#F58A82;border-width:2px}
+.err .icon{background:#F25C54;color:#fff}
+</style></head><body>
+<div class="row">
+  <div class="alert ok"><div class="icon">✓</div><div class="body"><div class="t">Calibração concluída</div><div class="d">CAM-407 · 14:32:08</div></div></div>
+  <div class="alert warn"><div class="icon">!</div><div class="body"><div class="t">Dosagem fora da faixa</div><div class="d">PC-1250-A · linha 2</div></div></div>
+  <div class="alert err"><div class="icon">!</div><div class="body"><div class="t">Sensor offline há 12 min</div><div class="d">CAM-219 · MD-220</div></div></div>
+</div>
+</body></html>

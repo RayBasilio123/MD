@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <path id="stTop" d="M 70 200 A 130 130 0 0 1 330 200" fill="none"></path>
+    <path id="stBot" d="M 70 200 A 130 130 0 0 0 330 200" fill="none"></path>
+  </defs>
+  <rect width="400" height="400" fill="#0A0A0A"></rect>
+  <polygon points="200,30 348,115 348,285 200,370 52,285 52,115" fill="none" stroke="#19E27A" stroke-width="6"></polygon>
+  <text font-family="ui-monospace, &#39;SF Mono&#39;, Menlo, monospace" font-weight="700" font-size="16" letter-spacing="6" fill="#19E27A">
+    <textPath href="#stTop" startOffset="50%" text-anchor="middle">FIELD PROVEN  IP67</textPath>
+  </text>
+  <text font-family="ui-monospace, &#39;SF Mono&#39;, Menlo, monospace" font-weight="700" font-size="16" letter-spacing="6" fill="#19E27A">
+    <textPath href="#stBot" startOffset="50%" text-anchor="middle">SINCE 2022  MG BRASIL</textPath>
+  </text>
+  <g transform="translate(200 175)" text-anchor="middle">
+    <rect x="-46" y="-22" width="92" height="3" fill="#19E27A"></rect>
+    <text y="14" font-family="ui-monospace, &#39;SF Mono&#39;, Menlo, monospace" font-weight="800" font-size="40" fill="#FFFFFF" letter-spacing="2">MINE</text>
+    <text y="52" font-family="ui-monospace, &#39;SF Mono&#39;, Menlo, monospace" font-weight="800" font-size="40" fill="#19E27A" letter-spacing="2">DEBUG</text>
+    <rect x="-46" y="62" width="92" height="3" fill="#19E27A"></rect>
+    <text y="86" font-family="ui-monospace, &#39;SF Mono&#39;, Menlo, monospace" font-weight="600" font-size="11" fill="#8A929E" letter-spacing="4">MINING SYSTEMS</text>
+  </g>
+</svg>

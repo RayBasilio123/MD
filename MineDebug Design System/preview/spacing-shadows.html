@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><style>
+body{margin:0;padding:32px;background:#F7F8FA;font-family:var(--font-sans)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.card{background:#fff;border-radius:8px;padding:20px;height:80px;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:#5A626E;letter-spacing:.04em}
+.s1{box-shadow:0 1px 2px rgba(10,10,10,.06), 0 1px 1px rgba(10,10,10,.04)}
+.s2{box-shadow:0 4px 12px rgba(10,10,10,.08), 0 2px 4px rgba(10,10,10,.04)}
+.s3{box-shadow:0 12px 32px rgba(10,10,10,.12), 0 4px 8px rgba(10,10,10,.06)}
+.glow{box-shadow:0 0 0 4px rgba(25,226,122,.35);border:1px solid #19E27A}
+</style></head><body>
+<div class="grid">
+  <div class="card s1">shadow-1</div>
+  <div class="card s2">shadow-2</div>
+  <div class="card s3">shadow-3</div>
+  <div class="card glow">glow (focus)</div>
+</div>
+</body></html>

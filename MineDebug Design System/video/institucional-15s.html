@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8">
+<title>MineDebug · Vídeo institucional 15s</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; color: #fff; font-family: var(--font-sans); overflow: hidden; }
+  #root { width: 100%; height: 100%; }
+  /* Hide animations.jsx scrubber until needed */
+  .scrubber { display: none; }
+  body:hover .scrubber { display: flex; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="animations.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// === Helpers ===
+const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (v, mi, ma) => Math.max(mi, Math.min(ma, v));
+
+// Counter that ramps from 0 -> target across a Sprite's local progress
+function Counter({ target, suffix = "", prefix = "", decimals = 0 }) {
+  const { progress } = useSprite();
+  const eased = Easing.easeOutCubic(progress);
+  const v = (target * eased).toFixed(decimals);
+  return <>{prefix}{v}{suffix}</>;
+}
+
+// Fade + slide-up entry
+function Reveal({ children, dur = 0.5, y = 24, style }) {
+  const { localTime } = useSprite();
+  const t = clamp(localTime / dur, 0, 1);
+  const e = Easing.easeOutCubic(t);
+  return (
+    <div style={{ opacity: e, transform: `translateY(${(1 - e) * y}px)`, ...style }}>
+      {children}
+    </div>
+  );
+}
+
+// Exit on the way out (from end-dur to end of sprite)
+function Hold({ children, fadeOut = 0.4, style }) {
+  const { localTime, end, start } = useSprite();
+  const remaining = (end - start) - localTime;
+  const t = clamp(remaining / fadeOut, 0, 1);
+  return <div style={{ opacity: t, ...style }}>{children}</div>;
+}
+
+// === SCENE 1 (0–3s): Hook — "MENOS DIESEL." ===
+function SceneHook() {
+  return (
+    <Sprite start={0} end={3}>
+      <div style={{
+        position: "absolute", inset: 0, background: "#000",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        flexDirection: "column", gap: 24,
+      }}>
+        {/* Background image fading in */}
+        <Sprite start={0} end={3}>
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "url(../assets/equipamento.jpeg)",
+            backgroundSize: "cover", backgroundPosition: "center",
+            opacity: useSprite().progress * 0.55,
+            filter: "grayscale(.3) contrast(1.1)",
+          }} />
+        </Sprite>
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.4), rgba(0,0,0,.85))" }} />
+
+        <Sprite start={0.2} end={2.6}>
+          <Reveal dur={0.45} y={30} style={{ position: "relative", textAlign: "center", zIndex: 2 }}>
+            <div style={{
+              fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: ".2em",
+              color: "#19E27A", marginBottom: 16, fontWeight: 600,
+            }}>MINEDEBUG TECHNOLOGY</div>
+            <div style={{
+              fontSize: 92, fontWeight: 900, letterSpacing: "-.03em",
+              lineHeight: 1, color: "#fff",
+            }}>MENOS DIESEL.</div>
+            <div style={{
+              fontSize: 92, fontWeight: 900, letterSpacing: "-.03em",
+              lineHeight: 1, marginTop: 8,
+            }}>MAIS <span style={{ color: "#19E27A" }}>EFICIÊNCIA</span>.</div>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: ".18em", color: "#B9BFC8", marginTop: 24, fontWeight: 500 }}>FROTA RODOVIÁRIA · FROTA FORA-DE-ESTRADA</div>
+          </Reveal>
+        </Sprite>
+      </div>
+    </Sprite>
+  );
+}
+
+// === SCENE 2 (3–7s): Problema → Solução em uma linha ===
+function SceneProblem() {
+  return (
+    <Sprite start={3} end={7}>
+      <div style={{ position: "absolute", inset: 0, background: "#0A0A0A", padding: 80, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 32 }}>
+        <Sprite start={3.0} end={6.8}>
+          <Reveal dur={0.4} style={{}}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: ".2em", color: "#19E27A", fontWeight: 600 }}>O PROBLEMA</div>
+          </Reveal>
+        </Sprite>
+        <Sprite start={3.2} end={6.8}>
+          <Reveal dur={0.5} y={20}>
+            <div style={{ fontSize: 56, fontWeight: 800, letterSpacing: "-.025em", lineHeight: 1.05, maxWidth: 1100 }}>
+              Caminhões <span style={{ color: "#fff" }}>rodoviários</span> e <span style={{ color: "#fff" }}>fora-de-estrada</span> queimam <span style={{ color: "#F5B73A" }}>milhares de litros de diesel por dia.</span>
+            </div>
+          </Reveal>
+        </Sprite>
+        <Sprite start={4.6} end={6.8}>
+          <Reveal dur={0.45} y={16}>
+            <div style={{ height: 1, background: "#19E27A", width: "30%", marginTop: 20 }} />
+            <div style={{ fontSize: 28, color: "#DDE1E6", marginTop: 24, fontWeight: 500, maxWidth: 900 }}>
+              A gente instrumenta sua frota e <span style={{ color: "#19E27A", fontWeight: 700 }}>devolve eficiência mensurável</span>.
+            </div>
+          </Reveal>
+        </Sprite>
+      </div>
+    </Sprite>
+  );
+}
+
+// === SCENE 3 (7–12s): Resultados — 3 stats ===
+function Stat({ value, suffix, label, delay }) {
+  return (
+    <Sprite start={7 + delay} end={11.8}>
+      <Reveal dur={0.5} y={28}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div style={{ height: 1, background: "#19E27A", width: 60 }} />
+          <div style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 96, color: "#19E27A", letterSpacing: "-.02em", lineHeight: 1 }}>
+            <Sprite start={7 + delay} end={9 + delay}><Counter target={value} suffix={suffix} /></Sprite>
+          </div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: ".15em", color: "#B9BFC8", textTransform: "uppercase", maxWidth: 280 }}>{label}</div>
+        </div>
+      </Reveal>
+    </Sprite>
+  );
+}
+
+function SceneStats() {
+  return (
+    <Sprite start={7} end={12}>
+      <div style={{ position: "absolute", inset: 0, background: "#0A0A0A", padding: 80, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 48 }}>
+        <Sprite start={7} end={11.8}>
+          <Reveal dur={0.4}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: ".2em", color: "#19E27A", fontWeight: 600 }}>RESULTADOS EM CAMPO</div>
+          </Reveal>
+        </Sprite>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 48 }}>
+          <Stat value={14} suffix="%" label="Redução média de consumo de diesel" delay={0.1} />
+          <Stat value={4} suffix="h" label="Instalação por equipamento — sem parada programada" delay={0.5} />
+          <Stat value={90} suffix={<> dias</>} label="Payback médio em frota rodoviária e fora-de-estrada" delay={0.9} />
+        </div>
+      </div>
+    </Sprite>
+  );
+}
+
+// === SCENE 4 (12–15s): CTA / Logo ===
+function SceneCTA() {
+  return (
+    <Sprite start={12} end={15}>
+      <div style={{ position: "absolute", inset: 0, background: "#000", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32 }}>
+        <Sprite start={12} end={15}>
+          <Reveal dur={0.5} y={20}>
+            <img src="../assets/logo.svg" style={{ width: 180, height: 180, display: "block", margin: "0 auto" }} />
+          </Reveal>
+        </Sprite>
+        <Sprite start={12.4} end={15}>
+          <Reveal dur={0.5} y={16}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 56, fontWeight: 800, letterSpacing: "-.025em", lineHeight: 1.05 }}>
+                Descarbonize sua mina.
+              </div>
+              <div style={{ fontSize: 24, color: "#B9BFC8", marginTop: 14, fontWeight: 500 }}>
+                Solicite uma demonstração técnica.
+              </div>
+            </div>
+          </Reveal>
+        </Sprite>
+        <Sprite start={13.0} end={15}>
+          <Reveal dur={0.4}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#19E27A", color: "#0A0A0A", padding: "16px 28px", borderRadius: 4, fontWeight: 700, fontSize: 18, fontFamily: "var(--font-sans)" }}>
+              minedebug.com.br
+            </div>
+          </Reveal>
+        </Sprite>
+      </div>
+    </Sprite>
+  );
+}
+
+// === Progress bar (all scenes) ===
+function ProgressBar() {
+  const t = useTime();
+  const p = clamp(t / 15, 0, 1);
+  return (
+    <>
+      <div style={{ position: "absolute", left: 0, bottom: 0, height: 4, width: "100%", background: "rgba(255,255,255,.1)", zIndex: 10 }} />
+      <div style={{ position: "absolute", left: 0, bottom: 0, height: 4, width: `${p * 100}%`, background: "#19E27A", zIndex: 11 }} />
+      <div style={{ position: "absolute", top: 24, right: 32, fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: ".15em", color: "rgba(255,255,255,.5)", zIndex: 10 }}>
+        {String(Math.floor(t * 10) / 10).padStart(4, "0")}s / 15.0s
+      </div>
+      <div style={{ position: "absolute", top: 24, left: 32, fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: ".15em", color: "rgba(255,255,255,.5)", zIndex: 10, display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ width: 8, height: 8, borderRadius: 999, background: "#19E27A", boxShadow: "0 0 8px #19E27A" }} />
+        REC · MINEDEBUG INSTITUCIONAL
+      </div>
+    </>
+  );
+}
+
+function Film() {
+  return (
+    <>
+      <SceneHook />
+      <SceneProblem />
+      <SceneStats />
+      <SceneCTA />
+      <ProgressBar />
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <Stage width={1920} height={1080} duration={15} background="#000" loop autoplay>
+    <Film />
+  </Stage>
+);
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><style>
+html,body{margin:0;padding:0;height:100%;width:100%}
+body{background:#0A0A0A;font-family:var(--font-sans);color:#fff;height:100vh;display:flex}
+.left{flex:1;background:url(../assets/equipamento.jpeg) center/cover;position:relative;border-right:2px solid #19E27A}
+.left::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(10,10,10,.55) 100%)}
+.badge{position:absolute;top:20px;left:20px;display:inline-flex;align-items:center;gap:8px;background:rgba(10,10,10,.75);backdrop-filter:blur(8px);border:1px solid rgba(25,226,122,.35);padding:6px 10px;border-radius:999px;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:#fff;z-index:1}
+.badge::before{content:"";width:6px;height:6px;border-radius:999px;background:#19E27A;box-shadow:0 0 8px #19E27A}
+.callouts{position:absolute;left:20px;bottom:20px;display:grid;gap:8px;z-index:1}
+.callout{display:inline-flex;align-items:center;gap:10px;background:rgba(10,10,10,.7);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.08);padding:8px 12px;border-radius:4px;font-size:11px;color:#DDE1E6}
+.callout strong{font-family:var(--font-mono);color:#19E27A;font-weight:600;letter-spacing:.04em}
+.right{width:340px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;border-left:1px solid #232830;background:#0A0A0A}
+.eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#19E27A;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:18px;height:1px;background:#19E27A}
+h2{font-size:24px;margin:10px 0 12px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+.lede{font-size:13px;color:#B9BFC8;margin:0 0 18px;line-height:1.55}
+.specs{display:grid;gap:1px;background:#232830;border:1px solid #232830;border-radius:6px;overflow:hidden;margin-bottom:18px}
+.spec{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:#0A0A0A;font-size:11px}
+.spec .k{font-family:var(--font-mono);color:#8A929E;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+.spec .v{color:#fff;font-weight:600}
+.spec .v.green{color:#19E27A}
+.principles{display:grid;gap:8px;margin-bottom:20px}
+.principle{display:flex;gap:10px;font-size:11px;line-height:1.5;color:#DDE1E6}
+.principle::before{content:"";width:14px;height:1px;background:#19E27A;margin-top:8px;flex:none}
+.principle strong{color:#fff;font-weight:600}
+.foot{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:#5A626E;border-top:1px solid #232830;padding-top:14px}
+</style></head><body>
+<div class="left">
+  <div class="badge">RETROFIT EM OPERAÇÃO · FIELD-PROVEN</div>
+  <div class="callouts">
+    <div class="callout"><strong>−14%</strong> consumo de diesel verificado</div>
+    <div class="callout"><strong>&lt;4h</strong> instalação por equipamento</div>
+    <div class="callout"><strong>0</strong> intervenção no powertrain OEM</div>
+  </div>
+</div>
+<div class="right">
+  <div>
+    <span class="eyebrow">DIRECTION · IMAGERY</span>
+    <h2>Hardware industrial em ambiente real de mina.</h2>
+    <p class="lede">Toda imagem comunica três promessas técnicas: <strong style="color:#fff">retrofit não-invasivo</strong>, <strong style="color:#fff">comissionamento em horas — não semanas</strong> e <strong style="color:#fff">payback medido no primeiro trimestre</strong>.</p>
+
+    <div class="specs">
+      <div class="spec"><span class="k">CAPEX</span><span class="v green">A partir de 1/10 do retrofit OEM</span></div>
+      <div class="spec"><span class="k">INSTALAÇÃO</span><span class="v">&lt; 4h · sem parada programada</span></div>
+      <div class="spec"><span class="k">INTEGRAÇÃO</span><span class="v">CAN-bus / J1939 · plug-and-play</span></div>
+      <div class="spec"><span class="k">PAYBACK MÉDIO</span><span class="v green">90 dias em frota Classe 8+</span></div>
+      <div class="spec"><span class="k">GARANTIA</span><span class="v">36 meses · IP67 · −10°C a 75°C</span></div>
+    </div>
+
+    <div class="principles">
+      <div class="principle"><div><strong>ROI verificável em 90 dias.</strong> Cada instalação sai com baseline + relatório de economia mensal auditado por terceiros.</div></div>
+      <div class="principle"><div><strong>Compatível com qualquer OEM.</strong> Caterpillar, Komatsu, Volvo, Liebherr e Scania — sem alteração de garantia da máquina.</div></div>
+      <div class="principle"><div><strong>Suporte 24/7 em campo.</strong> Engenheiros MineDebug presentes na mina durante o comissionamento e on-call permanente.</div></div>
+    </div>
+  </div>
+  <div class="foot">USO: HERO LP · PROPOSTA COMERCIAL · PITCH DECK</div>
+</div>
+</body></html>

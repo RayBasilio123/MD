@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../colors_and_type.css"><style>
+body{margin:0;padding:24px;background:#fff;font-family:var(--font-sans)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#5A626E;font-weight:600}
+input,select{font-family:var(--font-sans);font-size:14px;padding:10px 12px;border:1px solid #DDE1E6;border-radius:4px;background:#fff;color:#111418;outline:none}
+input:focus,select:focus{border-color:#19E27A;box-shadow:0 0 0 4px rgba(25,226,122,.35)}
+.with-unit{position:relative}
+.with-unit .unit{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--font-mono);font-size:12px;color:#8A929E}
+.with-unit input{padding-right:48px;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+</style></head><body>
+<div class="grid">
+  <div class="field"><label>Código do equipamento</label><input value="CAM-407"></div>
+  <div class="field"><label>Tipo</label><select><option>Caminhão fora-de-estrada</option><option>Escavadeira</option></select></div>
+  <div class="field"><label>Consumo alvo</label><div class="with-unit"><input value="42.0"><span class="unit">L/h</span></div></div>
+  <div class="field"><label>Frota</label><input value="Mina Carajás · Setor 4" style="border-color:#19E27A;box-shadow:0 0 0 4px rgba(25,226,122,.35)"></div>
+</div>
+</body></html>
