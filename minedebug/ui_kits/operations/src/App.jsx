@@ -38,7 +38,7 @@ function Dashboard() {
       <Topbar onExport={exportar} onDiag={() => setDiagOpen(true)} onMenuToggle={() => setSidebarOpen(o => !o)} />
       <div className="shell">
         {sidebarOpen && <div className="sidebar-overlay open" onClick={() => setSidebarOpen(false)} />}
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onVideoClick={() => setVideoOpen(true)} />
         <main className="main">
           <div className="page-head">
             <div>
@@ -46,10 +46,6 @@ function Dashboard() {
               <h1>Frota · Carajás Setor 4</h1>
             </div>
             <div className="actions">
-              <button className="btn btn-ghost" onClick={() => setVideoOpen(true)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                Ver Vídeo Institucional
-              </button>
               <button className="btn btn-ghost" onClick={exportar}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Exportar

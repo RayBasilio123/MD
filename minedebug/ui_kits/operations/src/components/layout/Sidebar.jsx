@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   LayoutDashboard, Truck, AlertTriangle, Activity,
-  Fuel, Cpu, Wrench, MapPin
+  Fuel, Cpu, Wrench, MapPin, Video
 } from 'lucide-react'
 import { useToast } from '../../hooks/useToast.jsx'
 
@@ -22,15 +22,20 @@ const SECTIONS = [
       { id: 'sensors', label: 'Sensores',     Icon: Cpu },
       { id: 'maint',   label: 'Manutenção',   Icon: Wrench },
       { id: 'sites',   label: 'Minas',        Icon: MapPin },
+      { id: 'video',   label: 'Institucional', Icon: Video },
     ],
   },
 ]
 
-export default function Sidebar({ isOpen }) {
+export default function Sidebar({ isOpen, onVideoClick }) {
   const [active, setActive] = useState('fleet')
   const showToast = useToast()
 
   function handleClick(item) {
+    if (item.id === 'video') {
+      if (onVideoClick) onVideoClick()
+      return
+    }
     setActive(item.id)
     if (item.id !== 'fleet') showToast(`Módulo ${item.label} em desenvolvimento`)
   }
