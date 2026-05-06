@@ -5,11 +5,13 @@ import MetricCard from './components/dashboard/MetricCard.jsx'
 import FleetTable from './components/dashboard/FleetTable.jsx'
 import AlertList from './components/dashboard/AlertList.jsx'
 import DiagModal from './components/ui/DiagModal.jsx'
+import VideoModal from './components/ui/VideoModal.jsx'
 import { ToastProvider } from './hooks/useToast.jsx'
 import { METRICS } from './data/mock.js'
 
 function Dashboard() {
   const [diagOpen, setDiagOpen] = useState(false)
+  const [videoOpen, setVideoOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   function exportar() {
@@ -44,12 +46,16 @@ function Dashboard() {
               <h1>Frota · Carajás Setor 4</h1>
             </div>
             <div className="actions">
+              <button className="btn btn-ghost" onClick={() => setVideoOpen(true)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Ver Vídeo Institucional
+              </button>
               <button className="btn btn-ghost" onClick={exportar}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Exportar
               </button>
               <button className="btn btn-primary" onClick={() => setDiagOpen(true)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 Iniciar diagnóstico
               </button>
             </div>
@@ -82,6 +88,7 @@ function Dashboard() {
         </main>
       </div>
       <DiagModal open={diagOpen} onClose={() => setDiagOpen(false)} />
+      <VideoModal open={videoOpen} onClose={() => setVideoOpen(false)} />
     </>
   )
 }

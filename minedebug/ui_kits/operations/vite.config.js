@@ -14,6 +14,7 @@ const MIME = {
   '.jpg':  'image/jpeg',
   '.jpeg': 'image/jpeg',
   '.webp': 'image/webp',
+  '.mp4':  'video/mp4',
 }
 
 function serveDesignSystem() {
@@ -45,6 +46,7 @@ function serveDesignSystem() {
         const dirs = {
           '/site/':   resolve(ROOT, 'site'),
           '/assets/': resolve(ROOT, 'assets'),
+          '/video/':  resolve(ROOT, 'video'),
         }
         for (const [prefix, dir] of Object.entries(dirs)) {
           if (url.startsWith(prefix)) {
