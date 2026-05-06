@@ -55,6 +55,18 @@
   .btn-ghost:hover { border-color: var(--page-fg-2); }
   .btn i { width: 14px; height: 14px; }
 
+  /* ===== Hamburger nav ===== */
+  .nav-hamburger { display: none; width: 38px; height: 38px; border-radius: 4px; border: 1px solid var(--page-border); background: transparent; cursor: pointer; align-items: center; justify-content: center; color: var(--page-fg-2); transition: all 120ms; flex-shrink: 0; }
+  .nav-hamburger:hover { border-color: var(--md-green-500); color: var(--md-green-500); }
+  .nav-hamburger i { width: 18px; height: 18px; }
+  .nav-drawer { display: none; flex-direction: column; background: var(--page-bg); border-top: 1px solid var(--page-border); padding: 8px 8px 16px; }
+  .nav-drawer.is-open { display: flex; }
+  .nav-drawer-links { display: flex; flex-direction: column; margin-bottom: 8px; }
+  .nav-drawer-links a { font-size: 15px; font-weight: 500; color: var(--page-fg-2); text-decoration: none; padding: 12px; border-radius: 4px; }
+  .nav-drawer-links a:hover { background: var(--page-bg-2); color: var(--page-fg); }
+  .nav-drawer-actions { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--page-border); }
+  .nav-drawer-actions .btn { justify-content: center; }
+
   /* ===== Hero ===== */
   .hero { background: var(--hero-bg); color: var(--hero-fg); position: relative; overflow: hidden; }
   .hero::before { content: ""; position: absolute; inset: 0; background-image: url(../assets/equipamento.jpeg); background-size: cover; background-position: center; opacity: .35; filter: grayscale(.2) contrast(1.05); }
@@ -163,10 +175,48 @@
   [data-theme="dark"] .apoio-item img { filter: grayscale(100%) brightness(1.2) opacity(0.6); }
   [data-theme="dark"] .apoio-item:hover img { filter: grayscale(0%) brightness(1) opacity(1); }
 
+  /* ===== Mobile refinements ===== */
+  img { max-width: 100%; height: auto; }
+
   @media (max-width: 900px) {
-    .hero-inner, .section-head, .services, .mvv, .team-grid, .team-section .lead-row, .cta .container, .footer-inner { grid-template-columns: 1fr !important; }
+    .hero-inner, .section-head, .services, .mvv, .cta .container, .footer-inner { grid-template-columns: 1fr !important; }
+    .team-grid { grid-template-columns: repeat(2, 1fr) !important; }
     .hero-stats { display: flex; gap: 24px; flex-wrap: wrap; }
     .stat { flex: 1; min-width: 140px; }
+  }
+
+  @media (max-width: 720px) {
+    .nav-inner { padding: 0 16px; height: 56px; flex-wrap: nowrap; gap: 8px; }
+    .nav-links { display: none; }
+    .nav-actions { margin-left: auto; }
+    .nav-actions .btn { display: none; }
+    .nav-hamburger { display: inline-flex; }
+
+    .hero-inner { padding: 64px 16px 72px; gap: 28px; }
+    .hero p { font-size: 16px; }
+    .hero-actions .btn { flex: 1 1 200px; justify-content: center; }
+
+    section { padding: 64px 0; }
+    .container { padding: 0 16px; }
+    .svc { padding: 24px; min-height: 0; }
+    .mvv-card { padding: 24px; }
+    .team-card { padding: 16px; }
+    .apoio { padding: 56px 0; }
+    .apoio-logos { gap: 20px 28px; }
+
+    .cta .container { gap: 32px; }
+    .cta p { font-size: 16px; }
+
+    .footer-inner { padding: 0 16px; gap: 28px; }
+    .footer-bottom { padding: 20px 16px 0; flex-direction: column; gap: 10px; }
+  }
+
+  @media (max-width: 560px) {
+    .team-grid { grid-template-columns: 1fr !important; }
+    .hero h1 { font-size: 34px; }
+    .stat .v { font-size: 26px; }
+    .hero-actions { flex-direction: column; }
+    .hero-actions .btn { justify-content: center; }
   }
 </style>
 </head>
@@ -190,6 +240,21 @@
       </button>
       <a class="btn btn-ghost" href="login.html"><i data-lucide="lock"></i>Acessar painel</a>
       <a class="btn btn-primary" href="#contato">Fale conosco</a>
+    </div>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Abrir menu" aria-expanded="false">
+      <i data-lucide="menu"></i>
+    </button>
+  </div>
+  <div class="nav-drawer" id="navDrawer" aria-hidden="true">
+    <div class="nav-drawer-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#solucoes">Soluções</a>
+      <a href="#equipe">Equipe</a>
+      <a href="#contato">Contato</a>
+    </div>
+    <div class="nav-drawer-actions">
+      <a class="btn btn-ghost" href="login.html"><i data-lucide="lock"></i>Acessar painel</a>
+      <a class="btn btn-primary" href="#contato"><i data-lucide="arrow-right"></i>Fale conosco</a>
     </div>
   </div>
 </nav>
@@ -442,6 +507,28 @@
     setTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
   });
   if (window.lucide) lucide.createIcons();
+
+  // Hamburger menu
+  const hamburger = document.getElementById('navHamburger');
+  const drawer = document.getElementById('navDrawer');
+  if (hamburger && drawer) {
+    hamburger.addEventListener('click', () => {
+      const isOpen = drawer.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+      hamburger.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
+      drawer.setAttribute('aria-hidden', String(!isOpen));
+      hamburger.querySelector('i').setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+      if (window.lucide) lucide.createIcons();
+    });
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      drawer.classList.remove('is-open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Abrir menu');
+      drawer.setAttribute('aria-hidden', 'true');
+      hamburger.querySelector('i').setAttribute('data-lucide', 'menu');
+      if (window.lucide) lucide.createIcons();
+    }));
+  }
 </script>
 </body>
 </html>

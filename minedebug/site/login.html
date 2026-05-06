@@ -73,6 +73,19 @@
   .err-msg i { width: 16px; height: 16px; flex: none; }
 
   @media (max-width: 900px) { .split { grid-template-columns: 1fr; } .visual { display: none; } }
+
+  @media (max-width: 600px) {
+    .form-side { padding: 24px 20px; align-items: flex-start; padding-top: 72px; }
+    .login-back { top: 20px; left: 16px; }
+    .login-card { width: 100%; }
+    .login-card h1 { font-size: 28px; }
+  }
+
+  @media (max-width: 400px) {
+    .form-side { padding: 64px 16px 24px; }
+    .login-eyebrow { font-size: 9px; padding: 4px 8px; }
+    .hint { flex-direction: column; gap: 6px; }
+  }
 </style>
 </head>
 <body data-screen-label="02 Login">
