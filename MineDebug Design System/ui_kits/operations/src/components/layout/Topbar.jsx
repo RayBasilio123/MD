@@ -17,7 +17,9 @@ export default function Topbar() {
 
   function logout() {
     try { sessionStorage.removeItem('md-auth') } catch {}
-    window.location.href = '/site/login.html'
+    window.location.href = window.location.protocol === 'file:' 
+      ? '../../site/login.html' 
+      : '/MineDebug%20Design%20System/site/login.html'
   }
 
   function handleNav(e, item) {
