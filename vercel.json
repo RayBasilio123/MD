@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/dashboard",
-      "destination": "/MineDebug%20Design%20System/ui_kits/operations/dist/index.html"
+      "destination": "/minedebug/ui_kits/operations/dist/index.html"
     },
     {
       "source": "/dashboard/(.*)",
-      "destination": "/MineDebug%20Design%20System/ui_kits/operations/dist/$1"
+      "destination": "/minedebug/ui_kits/operations/dist/$1"
     }
   ]
 }

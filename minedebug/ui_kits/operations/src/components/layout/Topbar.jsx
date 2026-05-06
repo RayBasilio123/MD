@@ -19,7 +19,7 @@ export default function Topbar() {
     try { sessionStorage.removeItem('md-auth') } catch {}
     window.location.href = window.location.protocol === 'file:' 
       ? '../../site/login.html' 
-      : '/MineDebug%20Design%20System/site/login.html'
+      : '/minedebug/site/login.html'
   }
 
   function handleNav(e, item) {

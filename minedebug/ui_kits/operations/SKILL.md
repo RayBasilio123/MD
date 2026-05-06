@@ -7,7 +7,7 @@ user-invocable: true
 ## Dev setup
 
 ```bash
-cd "MineDebug Design System/ui_kits/operations"
+cd "minedebug/ui_kits/operations"
 npm install
 npm run dev     # http://localhost:5173 — auth gate is bypassed in dev
 npm run build   # output: dist/
