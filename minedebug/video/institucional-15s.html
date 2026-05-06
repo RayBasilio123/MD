@@ -63,8 +63,7 @@ function Reveal({ children, delay = 0, dur = 0.9, y = 24, style }) {
 
 // ─── Animated counter (pt-BR formatted) ─────────────────────────────────────
 function Counter({ target, suffix = '', prefix = '', decimals = 0 }) {
-  const { progress } = useSprite();
-  const v = (target * Easing.easeOutCubic(progress));
+  const v = target;
   const s = v.toLocaleString('pt-BR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
   return <>{prefix}{s}{suffix}</>;
 }
@@ -82,19 +81,20 @@ function Eyebrow({ label, color = GN, delay = 0 }) {
 }
 
 // ─── Full-bleed photo background ─────────────────────────────────────────────
-function PhotoBg({ src, opacity = 0.4, blend = false }) {
+function PhotoBg({ src, opacity = 0.6, blend = false }) {
   return (
     <div style={{
       position: 'absolute', inset: 0,
       backgroundImage: `url(${src})`,
       backgroundSize: 'cover', backgroundPosition: 'center',
-      opacity, filter: 'grayscale(.15) contrast(1.05)',
+      opacity, filter: 'contrast(1.15) saturate(1.1) brightness(1.2)',
+      mixBlendMode: blend ? 'overlay' : 'normal'
     }} />
   );
 }
 
 // ─── Dark overlay ────────────────────────────────────────────────────────────
-function Overlay({ from = 'rgba(0,0,0,.5)', to = 'rgba(0,0,0,.88)', angle = '180deg' }) {
+function Overlay({ from = 'rgba(0,0,0,.4)', to = 'rgba(0,0,0,.85)', angle = '180deg' }) {
   return <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(${angle}, ${from}, ${to})` }} />;
 }
 
@@ -142,8 +142,8 @@ function C1Hook() {
   return (
     <Scene start={0} end={7} fadeIn={1.0} fadeOut={1.0}>
       <div style={{ position: 'absolute', inset: 0, background: BG }}>
-        <PhotoBg src="../assets/equipamento.jpeg" opacity={0.38} />
-        <Overlay from="rgba(0,0,0,.3)" to="rgba(0,0,0,.82)" />
+        <PhotoBg src="../assets/equipamento.jpeg" opacity={0.65} blend={true} />
+        <Overlay from="rgba(10,10,10,.25)" to="rgba(10,10,10,.85)" />
 
         <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
           <Eyebrow label="MINEDEBUG TECHNOLOGY" delay={0.4} />
@@ -153,7 +153,7 @@ function C1Hook() {
             </div>
           </Reveal>
           <Reveal delay={1.3} dur={1.0} y={32}>
-            <div style={{ fontSize: 104, fontWeight: 900, letterSpacing: '-.03em', lineHeight: .95 }}>
+            <div style={{ fontSize: 104, fontWeight: 900, letterSpacing: '-.03em', lineHeight: .95, color: F1 }}>
               MAIS <span style={{ color: GN }}>EFICIÊNCIA</span>.
             </div>
           </Reveal>
@@ -178,7 +178,7 @@ function C2Mercado() {
         <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
           <Eyebrow label="O MERCADO" delay={0.2} />
           <Reveal delay={0.6} dur={0.9} y={24}>
-            <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, maxWidth: 1100, marginBottom: 48 }}>
+            <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, maxWidth: 1100, marginBottom: 48, color: F1 }}>
               Setor mineral em <span style={{ color: GN }}>expansão</span>.<br />
               <span style={{ color: F2, fontSize: 52 }}>Brasil entre os maiores do mundo.</span>
             </div>
@@ -208,11 +208,12 @@ function C3Problema() {
   return (
     <Scene start={13} end={21} fadeIn={0.9} fadeOut={0.9}>
       <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
-        <PhotoBg src="../assets/vista-equipamento.jpeg" opacity={0.12} />
+        <PhotoBg src="../assets/vista-equipamento.jpeg" opacity={0.4} blend={true} />
+        <Overlay from="rgba(10,13,10,.5)" to="rgba(10,13,10,.9)" />
         <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
           <Eyebrow label="O PROBLEMA" color={AM} delay={0.2} />
           <Reveal delay={0.7} dur={1.0} y={24}>
-            <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, maxWidth: 1200, marginBottom: 40 }}>
+            <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, maxWidth: 1200, marginBottom: 40, color: F1 }}>
               Caminhões de mineração consomem<br />
               <span style={{ color: AM }}>milhares de litros de diesel por dia.</span>
             </div>
@@ -244,12 +245,12 @@ function C4Solucao() {
   return (
     <Scene start={20} end={30} fadeIn={0.9} fadeOut={0.9}>
       <div style={{ position: 'absolute', inset: 0, background: BG }}>
-        <PhotoBg src="../assets/robson-csn.jpeg" opacity={0.18} />
-        <Overlay from="rgba(0,0,0,.6)" to="rgba(0,0,0,.90)" />
+        <PhotoBg src="../assets/robson-csn.jpeg" opacity={0.45} blend={true} />
+        <Overlay from="rgba(10,13,10,.5)" to="rgba(10,13,10,.9)" />
         <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
           <Eyebrow label="NOSSA SOLUÇÃO" delay={0.2} />
           <Reveal delay={0.7} dur={1.0} y={24}>
-            <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 14 }}>
+            <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 14, color: F1 }}>
               Sistema híbrido <span style={{ color: GN }}>H₂ + Diesel</span>
             </div>
           </Reveal>
@@ -326,7 +327,7 @@ function C6Financeiro() {
           <div style={{ flex: 1 }}>
             <Eyebrow label="VIABILIDADE FINANCEIRA" delay={0.2} />
             <Reveal delay={0.7} dur={1.0} y={24}>
-              <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 28 }}>
+              <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 28, color: F1 }}>
                 Retorno em <span style={{ color: GN }}>menos de 2 anos</span>.
               </div>
             </Reveal>
@@ -431,7 +432,7 @@ function C9Equipe() {
         <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
           <Eyebrow label="NOSSA EQUIPE" delay={0.2} />
           <Reveal delay={0.7} dur={1.0} y={24}>
-            <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 32 }}>
+            <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 32, color: F1 }}>
               Multidisciplinar.<br />
               <span style={{ color: GN, fontSize: 52 }}>Especialistas onde importa.</span>
             </div>
@@ -455,6 +456,13 @@ function C9Equipe() {
             <div style={{ fontSize: 18, color: F3, marginTop: 32, lineHeight: 1.6, maxWidth: 900 }}>
               Com apoio da <strong style={{ color: F1 }}>FAPEMIG</strong>, parceria com o <strong style={{ color: F1 }}>Instituto Tecnológico Vale</strong> e testes validados na <strong style={{ color: F1 }}>CSN Casa de Pedra</strong>.
             </div>
+            <div style={{ display: 'flex', gap: 40, marginTop: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+              <img src="../assets/apoio/fapemig.png" style={{ height: 40, opacity: 0.7, filter: 'grayscale(100%) brightness(200%)' }} />
+              <img src="../assets/apoio/vale.png" style={{ height: 32, opacity: 0.7, filter: 'grayscale(100%) brightness(200%)' }} />
+              <img src="../assets/apoio/csn.png" style={{ height: 50, opacity: 0.7, filter: 'grayscale(100%) brightness(200%)' }} />
+              <img src="../assets/apoio/ufop.png" style={{ height: 45, opacity: 0.7, filter: 'grayscale(100%) brightness(200%)' }} />
+              <img src="../assets/apoio/incultec.png" style={{ height: 40, opacity: 0.7, filter: 'grayscale(100%) brightness(200%)' }} />
+            </div>
           </Reveal>
         </div>
       </div>
@@ -473,7 +481,7 @@ function C10CTA() {
           <img src="../assets/logo.svg" style={{ width: 160, height: 160, display: 'block', margin: '0 auto' }} />
         </Reveal>
         <Reveal delay={1.0} dur={1.0} y={20} style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05 }}>
+          <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, color: F1 }}>
             Descarbonize sua mina.
           </div>
           <div style={{ fontSize: 26, color: F3, marginTop: 14, fontWeight: 400 }}>

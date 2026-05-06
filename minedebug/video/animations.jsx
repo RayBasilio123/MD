@@ -329,6 +329,7 @@ function Stage({
   loop = true,
   autoplay = true,
   persistKey = 'animstage',
+  speed = 1.0,
   children,
 }) {
   const [time, setTime] = React.useState(() => {

@@ -10,7 +10,13 @@
       "PowerShell(Get-Process *)",
       "Bash(python -c \"from PIL import Image; print\\('Pillow OK'\\)\")",
       "Bash(python split_logos.py)",
-      "Bash(Remove-Item *)"
+      "Bash(Remove-Item *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\rayba\\\\Music\\\\Analista\\\\MD\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "Bash(Format-Table -AutoSize -Wrap)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\rayba\\\\Music\\\\Analista\\\\MD\\\\minedebug\" -Force | Where-Object { $_.PSIsContainer -or $_.Extension -in @\\('.css', '.md', '.html', '.svg', '.json'\\) } | Select-Object Name, PSIsContainer)",
+      "WebFetch(domain:md-seven-green.vercel.app)"
     ]
   }
 }
