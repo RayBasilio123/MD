@@ -2,43 +2,57 @@
 <html lang="pt-br">
 <head>
 <meta charset="utf-8">
-<title>MineDebug · Vídeo institucional 15s</title>
+<title>MineDebug · Vídeo institucional</title>
 <link rel="stylesheet" href="../colors_and_type.css">
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; background: #000; color: #fff; font-family: var(--font-sans); overflow: hidden; }
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; }
   #root { width: 100%; height: 100%; }
-  /* Hide animations.jsx scrubber until needed */
-  .scrubber { display: none; }
-  body:hover .scrubber { display: flex; }
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script type="text/babel" src="animations.jsx"></script>
 
 <script type="text/babel">
-const { useState, useEffect } = React;
+const { useState, useEffect, useMemo } = React;
 
-// === Helpers ===
-const lerp = (a, b, t) => a + (b - a) * t;
-const clamp = (v, mi, ma) => Math.max(mi, Math.min(ma, v));
+// ─── Brand tokens ────────────────────────────────────────────────────────────
+const GN  = '#19E27A';
+const AM  = '#F5B73A';
+const DA  = '#F25C54';
+const BG  = '#000000';
+const BG2 = '#0A0A0A';
+const F1  = '#FFFFFF';
+const F2  = '#DDE1E6';
+const F3  = '#B9BFC8';
+const MONO = 'JetBrains Mono, ui-monospace, monospace';
+const SANS = 'Inter, system-ui, sans-serif';
 
-// Counter that ramps from 0 -> target across a Sprite's local progress
-function Counter({ target, suffix = "", prefix = "", decimals = 0 }) {
-  const { progress } = useSprite();
-  const eased = Easing.easeOutCubic(progress);
-  const v = (target * eased).toFixed(decimals);
-  return <>{prefix}{v}{suffix}</>;
+// ─── Scene wrapper with smooth fade-in / fade-out ────────────────────────────
+function Scene({ start, end, fadeIn = 0.9, fadeOut = 0.9, children }) {
+  const t = useTime();
+  if (t < start - 0.1 || t > end + 0.1) return null;
+  const loc  = t - start;
+  const dur  = end - start;
+  const inP  = clamp(loc / fadeIn, 0, 1);
+  const outP = clamp((loc - (dur - fadeOut)) / fadeOut, 0, 1);
+  const op   = Easing.easeInOutSine(inP) * (1 - Easing.easeInOutSine(outP));
+  return (
+    <SpriteContext.Provider value={{ localTime: Math.max(0, loc), progress: clamp(loc / dur, 0, 1), duration: dur, visible: true }}>
+      <div style={{ position: 'absolute', inset: 0, opacity: op, overflow: 'hidden' }}>
+        {children}
+      </div>
+    </SpriteContext.Provider>
+  );
 }
 
-// Fade + slide-up entry
-function Reveal({ children, dur = 0.5, y = 24, style }) {
+// ─── Slide-up reveal (uses SpriteContext.localTime) ──────────────────────────
+function Reveal({ children, delay = 0, dur = 0.9, y = 24, style }) {
   const { localTime } = useSprite();
-  const t = clamp(localTime / dur, 0, 1);
+  const t = clamp((localTime - delay) / dur, 0, 1);
   const e = Easing.easeOutCubic(t);
   return (
     <div style={{ opacity: e, transform: `translateY(${(1 - e) * y}px)`, ...style }}>
@@ -47,190 +61,489 @@ function Reveal({ children, dur = 0.5, y = 24, style }) {
   );
 }
 
-// Exit on the way out (from end-dur to end of sprite)
-function Hold({ children, fadeOut = 0.4, style }) {
-  const { localTime, end, start } = useSprite();
-  const remaining = (end - start) - localTime;
-  const t = clamp(remaining / fadeOut, 0, 1);
-  return <div style={{ opacity: t, ...style }}>{children}</div>;
+// ─── Animated counter (pt-BR formatted) ─────────────────────────────────────
+function Counter({ target, suffix = '', prefix = '', decimals = 0 }) {
+  const { progress } = useSprite();
+  const v = (target * Easing.easeOutCubic(progress));
+  const s = v.toLocaleString('pt-BR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  return <>{prefix}{s}{suffix}</>;
 }
 
-// === SCENE 1 (0–3s): Hook — "MENOS DIESEL." ===
-function SceneHook() {
+// ─── Eyebrow label ───────────────────────────────────────────────────────────
+function Eyebrow({ label, color = GN, delay = 0 }) {
   return (
-    <Sprite start={0} end={3}>
-      <div style={{
-        position: "absolute", inset: 0, background: "#000",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        flexDirection: "column", gap: 24,
-      }}>
-        {/* Background image fading in */}
-        <Sprite start={0} end={3}>
-          <div style={{
-            position: "absolute", inset: 0,
-            backgroundImage: "url(../assets/equipamento.jpeg)",
-            backgroundSize: "cover", backgroundPosition: "center",
-            opacity: useSprite().progress * 0.55,
-            filter: "grayscale(.3) contrast(1.1)",
-          }} />
-        </Sprite>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.4), rgba(0,0,0,.85))" }} />
-
-        <Sprite start={0.2} end={2.6}>
-          <Reveal dur={0.45} y={30} style={{ position: "relative", textAlign: "center", zIndex: 2 }}>
-            <div style={{
-              fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: ".2em",
-              color: "#19E27A", marginBottom: 16, fontWeight: 600,
-            }}>MINEDEBUG TECHNOLOGY</div>
-            <div style={{
-              fontSize: 92, fontWeight: 900, letterSpacing: "-.03em",
-              lineHeight: 1, color: "#fff",
-            }}>MENOS DIESEL.</div>
-            <div style={{
-              fontSize: 92, fontWeight: 900, letterSpacing: "-.03em",
-              lineHeight: 1, marginTop: 8,
-            }}>MAIS <span style={{ color: "#19E27A" }}>EFICIÊNCIA</span>.</div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: ".18em", color: "#B9BFC8", marginTop: 24, fontWeight: 500 }}>FROTA RODOVIÁRIA · FROTA FORA-DE-ESTRADA</div>
-          </Reveal>
-        </Sprite>
+    <Reveal delay={delay} dur={0.7}>
+      <div style={{ fontFamily: MONO, fontSize: 13, letterSpacing: '.2em', fontWeight: 600, color, display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+        <span style={{ width: 32, height: 1, background: color, display: 'inline-block', flexShrink: 0 }} />
+        {label}
       </div>
-    </Sprite>
+    </Reveal>
   );
 }
 
-// === SCENE 2 (3–7s): Problema → Solução em uma linha ===
-function SceneProblem() {
+// ─── Full-bleed photo background ─────────────────────────────────────────────
+function PhotoBg({ src, opacity = 0.4, blend = false }) {
   return (
-    <Sprite start={3} end={7}>
-      <div style={{ position: "absolute", inset: 0, background: "#0A0A0A", padding: 80, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 32 }}>
-        <Sprite start={3.0} end={6.8}>
-          <Reveal dur={0.4} style={{}}>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: ".2em", color: "#19E27A", fontWeight: 600 }}>O PROBLEMA</div>
-          </Reveal>
-        </Sprite>
-        <Sprite start={3.2} end={6.8}>
-          <Reveal dur={0.5} y={20}>
-            <div style={{ fontSize: 56, fontWeight: 800, letterSpacing: "-.025em", lineHeight: 1.05, maxWidth: 1100 }}>
-              Caminhões <span style={{ color: "#fff" }}>rodoviários</span> e <span style={{ color: "#fff" }}>fora-de-estrada</span> queimam <span style={{ color: "#F5B73A" }}>milhares de litros de diesel por dia.</span>
-            </div>
-          </Reveal>
-        </Sprite>
-        <Sprite start={4.6} end={6.8}>
-          <Reveal dur={0.45} y={16}>
-            <div style={{ height: 1, background: "#19E27A", width: "30%", marginTop: 20 }} />
-            <div style={{ fontSize: 28, color: "#DDE1E6", marginTop: 24, fontWeight: 500, maxWidth: 900 }}>
-              A gente instrumenta sua frota e <span style={{ color: "#19E27A", fontWeight: 700 }}>devolve eficiência mensurável</span>.
-            </div>
-          </Reveal>
-        </Sprite>
-      </div>
-    </Sprite>
+    <div style={{
+      position: 'absolute', inset: 0,
+      backgroundImage: `url(${src})`,
+      backgroundSize: 'cover', backgroundPosition: 'center',
+      opacity, filter: 'grayscale(.15) contrast(1.05)',
+    }} />
   );
 }
 
-// === SCENE 3 (7–12s): Resultados — 3 stats ===
-function Stat({ value, suffix, label, delay }) {
+// ─── Dark overlay ────────────────────────────────────────────────────────────
+function Overlay({ from = 'rgba(0,0,0,.5)', to = 'rgba(0,0,0,.88)', angle = '180deg' }) {
+  return <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(${angle}, ${from}, ${to})` }} />;
+}
+
+// ─── Horizontal divider ──────────────────────────────────────────────────────
+function Divider({ color = GN, width = 48, delay = 0 }) {
+  const { localTime } = useSprite();
+  const t = clamp((localTime - delay) / 0.8, 0, 1);
+  const e = Easing.easeOutCubic(t);
+  return <div style={{ width: e * width, height: 1, background: color, marginBottom: 20, marginTop: 4 }} />;
+}
+
+// ─── Big stat card ───────────────────────────────────────────────────────────
+function StatCard({ value, suffix, label, delay, color = GN, size = 96 }) {
   return (
-    <Sprite start={7 + delay} end={11.8}>
-      <Reveal dur={0.5} y={28}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ height: 1, background: "#19E27A", width: 60 }} />
-          <div style={{ fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 96, color: "#19E27A", letterSpacing: "-.02em", lineHeight: 1 }}>
-            <Sprite start={7 + delay} end={9 + delay}><Counter target={value} suffix={suffix} /></Sprite>
+    <Sprite start={0} end={Infinity}>
+      <Reveal delay={delay} dur={0.9} y={28}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <Divider color={color} width={48} delay={delay} />
+          <div style={{ fontFamily: MONO, fontWeight: 800, fontSize: size, color, letterSpacing: '-.02em', lineHeight: 1 }}>
+            <Counter target={value} suffix={suffix} />
           </div>
-          <div style={{ fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: ".15em", color: "#B9BFC8", textTransform: "uppercase", maxWidth: 280 }}>{label}</div>
+          <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '.14em', color: F3, textTransform: 'uppercase', maxWidth: 260 }}>{label}</div>
         </div>
       </Reveal>
     </Sprite>
   );
 }
 
-function SceneStats() {
+// ─── Bullet item ─────────────────────────────────────────────────────────────
+function Bullet({ children, delay = 0, icon = '→', color = GN }) {
   return (
-    <Sprite start={7} end={12}>
-      <div style={{ position: "absolute", inset: 0, background: "#0A0A0A", padding: 80, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "center", gap: 48 }}>
-        <Sprite start={7} end={11.8}>
-          <Reveal dur={0.4}>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: ".2em", color: "#19E27A", fontWeight: 600 }}>RESULTADOS EM CAMPO</div>
+    <Reveal delay={delay} dur={0.8} y={16}>
+      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', marginBottom: 18 }}>
+        <span style={{ fontFamily: MONO, fontSize: 13, color, flexShrink: 0, marginTop: 4 }}>{icon}</span>
+        <div style={{ fontSize: 22, color: F2, lineHeight: 1.45, fontWeight: 400 }}>{children}</div>
+      </div>
+    </Reveal>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 1 — Hook (0 – 7s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C1Hook() {
+  return (
+    <Scene start={0} end={7} fadeIn={1.0} fadeOut={1.0}>
+      <div style={{ position: 'absolute', inset: 0, background: BG }}>
+        <PhotoBg src="../assets/equipamento.jpeg" opacity={0.38} />
+        <Overlay from="rgba(0,0,0,.3)" to="rgba(0,0,0,.82)" />
+
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="MINEDEBUG TECHNOLOGY" delay={0.4} />
+          <Reveal delay={0.8} dur={1.0} y={32}>
+            <div style={{ fontSize: 104, fontWeight: 900, letterSpacing: '-.03em', lineHeight: .95, color: F1, marginBottom: 8 }}>
+              MENOS DIESEL.
+            </div>
           </Reveal>
-        </Sprite>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 48 }}>
-          <Stat value={14} suffix="%" label="Redução média de consumo de diesel" delay={0.1} />
-          <Stat value={4} suffix="h" label="Instalação por equipamento — sem parada programada" delay={0.5} />
-          <Stat value={90} suffix={<> dias</>} label="Payback médio em frota rodoviária e fora-de-estrada" delay={0.9} />
+          <Reveal delay={1.3} dur={1.0} y={32}>
+            <div style={{ fontSize: 104, fontWeight: 900, letterSpacing: '-.03em', lineHeight: .95 }}>
+              MAIS <span style={{ color: GN }}>EFICIÊNCIA</span>.
+            </div>
+          </Reveal>
+          <Reveal delay={2.0} dur={0.9} y={16}>
+            <div style={{ fontFamily: MONO, fontSize: 14, letterSpacing: '.18em', color: F3, marginTop: 32, fontWeight: 500 }}>
+              FROTA RODOVIÁRIA · FROTA FORA-DE-ESTRADA · MINERAÇÃO
+            </div>
+          </Reveal>
         </div>
       </div>
-    </Sprite>
+    </Scene>
   );
 }
 
-// === SCENE 4 (12–15s): CTA / Logo ===
-function SceneCTA() {
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 2 — Mercado (6 – 14s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C2Mercado() {
   return (
-    <Sprite start={12} end={15}>
-      <div style={{ position: "absolute", inset: 0, background: "#000", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 32 }}>
-        <Sprite start={12} end={15}>
-          <Reveal dur={0.5} y={20}>
-            <img src="../assets/logo.svg" style={{ width: 180, height: 180, display: "block", margin: "0 auto" }} />
+    <Scene start={6} end={14} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="O MERCADO" delay={0.2} />
+          <Reveal delay={0.6} dur={0.9} y={24}>
+            <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, maxWidth: 1100, marginBottom: 48 }}>
+              Setor mineral em <span style={{ color: GN }}>expansão</span>.<br />
+              <span style={{ color: F2, fontSize: 52 }}>Brasil entre os maiores do mundo.</span>
+            </div>
           </Reveal>
-        </Sprite>
-        <Sprite start={12.4} end={15}>
-          <Reveal dur={0.5} y={16}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 56, fontWeight: 800, letterSpacing: "-.025em", lineHeight: 1.05 }}>
-                Descarbonize sua mina.
-              </div>
-              <div style={{ fontSize: 24, color: "#B9BFC8", marginTop: 14, fontWeight: 500 }}>
-                Solicite uma demonstração técnica.
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 64 }}>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={9.1} suffix="%" label="Crescimento do setor mineral em 2024 (Agência Brasil)" delay={1.0} size={88} />
+            </Sprite>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={40} suffix="%" label="Da produção mineral nacional vem de Minas Gerais (Diário do Comércio, 2025)" delay={1.4} size={88} />
+            </Sprite>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={4} suffix="%" label="Do PIB nacional representado pela indústria mineral (IPEA, 2000–2019)" delay={1.8} size={88} color={AM} />
+            </Sprite>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 3 — Problema (13 – 21s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C3Problema() {
+  return (
+    <Scene start={13} end={21} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <PhotoBg src="../assets/vista-equipamento.jpeg" opacity={0.12} />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="O PROBLEMA" color={AM} delay={0.2} />
+          <Reveal delay={0.7} dur={1.0} y={24}>
+            <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, maxWidth: 1200, marginBottom: 40 }}>
+              Caminhões de mineração consomem<br />
+              <span style={{ color: AM }}>milhares de litros de diesel por dia.</span>
+            </div>
+          </Reveal>
+          <Reveal delay={1.6} dur={0.9}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 24 }}>
+              <div style={{ fontFamily: MONO, fontSize: 80, fontWeight: 800, color: AM, letterSpacing: '-.02em', lineHeight: 1 }}>38%</div>
+              <div>
+                <div style={{ fontSize: 22, color: F1, fontWeight: 600, marginBottom: 4 }}>dos custos operacionais de uma mina</div>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: AM, letterSpacing: '.12em' }}>TENDÊNCIA DE ALTA</div>
               </div>
             </div>
           </Reveal>
-        </Sprite>
-        <Sprite start={13.0} end={15}>
-          <Reveal dur={0.4}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "#19E27A", color: "#0A0A0A", padding: "16px 28px", borderRadius: 4, fontWeight: 700, fontSize: 18, fontFamily: "var(--font-sans)" }}>
+          <Reveal delay={2.4} dur={0.9} y={16}>
+            <div style={{ fontSize: 19, color: F3, lineHeight: 1.6, maxWidth: 900 }}>
+              Essa dependência dificulta a adequação às <strong style={{ color: F2 }}>regulamentações ambientais</strong> voltadas ao combate ao aquecimento global — e impacta diretamente a competitividade das operações.
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 4 — Solução HGEN (20 – 30s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C4Solucao() {
+  return (
+    <Scene start={20} end={30} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG }}>
+        <PhotoBg src="../assets/robson-csn.jpeg" opacity={0.18} />
+        <Overlay from="rgba(0,0,0,.6)" to="rgba(0,0,0,.90)" />
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="NOSSA SOLUÇÃO" delay={0.2} />
+          <Reveal delay={0.7} dur={1.0} y={24}>
+            <div style={{ fontSize: 72, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 14 }}>
+              Sistema híbrido <span style={{ color: GN }}>H₂ + Diesel</span>
+            </div>
+          </Reveal>
+          <Reveal delay={1.2} dur={0.9}>
+            <div style={{ fontSize: 20, color: F3, marginBottom: 48, maxWidth: 900, lineHeight: 1.6 }}>
+              Injeção complementar de hidrogênio no motor a diesel — reduz emissões sem alterações complexas nos equipamentos. A combustão do H₂ libera apenas energia e água.
+            </div>
+          </Reveal>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, maxWidth: 1200 }}>
+            <Reveal delay={1.8} dur={0.9} y={20}>
+              <div style={{ background: 'rgba(255,255,255,.04)', border: '1px solid rgba(255,255,255,.10)', borderRadius: 8, padding: '28px 32px' }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.14em', color: GN, fontWeight: 600, marginBottom: 12 }}>KIT HGEN 1.0 · EM CAMPO</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: F1, marginBottom: 12 }}>Sistema embarcado IoT</div>
+                <div style={{ fontSize: 16, color: F3, lineHeight: 1.55 }}>Monitoramento sem fio, instalação em 4h, já validado em condições reais na <span style={{ color: GN }}>CSN Casa de Pedra, MG</span>.</div>
+              </div>
+            </Reveal>
+            <Reveal delay={2.3} dur={0.9} y={20}>
+              <div style={{ background: `rgba(25,226,122,.06)`, border: `1px solid rgba(25,226,122,.25)`, borderRadius: 8, padding: '28px 32px' }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.14em', color: GN, fontWeight: 600, marginBottom: 12 }}>KIT HGEN 2.0 · NOVA GERAÇÃO</div>
+                <div style={{ fontSize: 24, fontWeight: 700, color: F1, marginBottom: 12 }}>Plataforma avançada</div>
+                <div style={{ fontSize: 16, color: F3, lineHeight: 1.55 }}>Evolução baseada nos dados de campo — maior eficiência, diagnóstico preditivo e integração multiplataforma IoT.</div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 5 — Resultados (29 – 39s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C5Resultados() {
+  return (
+    <Scene start={29} end={39} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="RESULTADOS EM CAMPO" delay={0.2} />
+          <Reveal delay={0.6} dur={0.9} y={20}>
+            <div style={{ fontSize: 52, fontWeight: 700, letterSpacing: '-.02em', color: F2, marginBottom: 52 }}>
+              Números reais. Testados na mineração.
+            </div>
+          </Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 48 }}>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={10}     suffix="%"    label="Redução no consumo de diesel (testes iniciais)" delay={1.0} size={80} />
+            </Sprite>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={7049}   suffix="L"    label="Litros de diesel economizados" delay={1.5} size={80} />
+            </Sprite>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={19}     suffix="t"    label="CO₂ evitadas na atmosfera" delay={2.0} size={80} color={GN} />
+            </Sprite>
+            <Sprite start={0} end={Infinity}>
+              <StatCard value={45395}  suffix=""     label="Reais de economia gerada (R$)" prefix="R$" delay={2.5} size={64} color={AM} />
+            </Sprite>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 6 — Viabilidade financeira (38 – 46s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C6Financeiro() {
+  return (
+    <Scene start={38} end={46} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', padding: '0 120px', gap: 120 }}>
+          <div style={{ flex: 1 }}>
+            <Eyebrow label="VIABILIDADE FINANCEIRA" delay={0.2} />
+            <Reveal delay={0.7} dur={1.0} y={24}>
+              <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 28 }}>
+                Retorno em <span style={{ color: GN }}>menos de 2 anos</span>.
+              </div>
+            </Reveal>
+            <Reveal delay={1.4} dur={0.9}>
+              <div style={{ fontSize: 20, color: F3, lineHeight: 1.65, maxWidth: 700 }}>
+                Com um custo de implantação estimado em <strong style={{ color: F1 }}>R$80.000</strong> para o kit HGEN 1.0, e R$45.395,56 já economizados nos testes iniciais considerando diesel a R$6,44/litro.
+              </div>
+            </Reveal>
+          </div>
+          <div style={{ flexShrink: 0 }}>
+            <Reveal delay={1.8} dur={0.9} y={24}>
+              <div style={{ border: `1px solid rgba(25,226,122,.25)`, borderRadius: 8, padding: '36px 48px', background: 'rgba(25,226,122,.04)', textAlign: 'center' }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.14em', color: GN, marginBottom: 12 }}>CUSTO DO KIT HGEN 1.0</div>
+                <div style={{ fontFamily: MONO, fontSize: 64, fontWeight: 800, color: F1, letterSpacing: '-.02em', lineHeight: 1 }}>R$80k</div>
+                <div style={{ height: 1, background: 'rgba(255,255,255,.1)', margin: '24px 0' }} />
+                <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.14em', color: GN, marginBottom: 12 }}>PAYBACK MÉDIO</div>
+                <div style={{ fontFamily: MONO, fontSize: 64, fontWeight: 800, color: GN, letterSpacing: '-.02em', lineHeight: 1 }}>&lt; 2 anos</div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 7 — Modelo de negócio (45 – 54s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C7Modelo() {
+  return (
+    <Scene start={45} end={54} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="MODELO DE NEGÓCIO" delay={0.2} />
+          <Reveal delay={0.6} dur={0.9} y={20}>
+            <div style={{ fontSize: 52, fontWeight: 700, letterSpacing: '-.02em', color: F2, marginBottom: 40 }}>
+              Quatro fontes de receita.
+            </div>
+          </Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px 80px', maxWidth: 1400 }}>
+            <Bullet delay={1.1}>
+              <strong style={{ color: F1 }}>Venda e suporte do kit</strong> — comercialização direta para mineradoras com contrato de suporte técnico
+            </Bullet>
+            <Bullet delay={1.7}>
+              <strong style={{ color: F1 }}>IoT por assinatura</strong> — monitoramento multiplataforma e telemetria contínua da frota
+            </Bullet>
+            <Bullet delay={2.3}>
+              <strong style={{ color: F1 }}>Consultoria</strong> — projetos customizados de descarbonização para clientes estratégicos
+            </Bullet>
+            <Bullet delay={2.9}>
+              <strong style={{ color: F1 }}>Licenciamento de tecnologia</strong> — para fabricantes que queiram integrar nossa solução em seus produtos
+            </Bullet>
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 8 — Vantagens competitivas (53 – 61s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C8Vantagens() {
+  return (
+    <Scene start={53} end={61} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="VANTAGENS COMPETITIVAS" delay={0.2} />
+          <Reveal delay={0.6} dur={0.9} y={20}>
+            <div style={{ fontSize: 52, fontWeight: 700, letterSpacing: '-.02em', color: F2, marginBottom: 48 }}>
+              Por que escolher a MineDebug?
+            </div>
+          </Reveal>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 32, maxWidth: 1500 }}>
+            {[
+              { t: 'IoT sem fio embarcado', d: 'Aquisição de dados sem fio já integrada — pronto para telemetria multiplataforma sem infraestrutura adicional', delay: 1.1 },
+              { t: 'Baixo custo de implementação', d: 'Investimento acessível frente aos altos valores de equipamentos pesados empregados na indústria mineral', delay: 1.7 },
+              { t: 'Sem grandes modificações', d: 'Instalação em 4h no equipamento em campo — sem alterações complexas na mecânica ou parada longa de produção', delay: 2.3 },
+            ].map(({ t, d, delay }) => (
+              <Reveal key={t} delay={delay} dur={0.9} y={20}>
+                <div style={{ borderTop: `2px solid ${GN}`, paddingTop: 20 }}>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: F1, marginBottom: 12 }}>{t}</div>
+                  <div style={{ fontSize: 17, color: F3, lineHeight: 1.6 }}>{d}</div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 9 — Equipe (60 – 67s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C9Equipe() {
+  return (
+    <Scene start={60} end={67} fadeIn={0.9} fadeOut={0.9}>
+      <div style={{ position: 'absolute', inset: 0, background: BG2 }}>
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 120px' }}>
+          <Eyebrow label="NOSSA EQUIPE" delay={0.2} />
+          <Reveal delay={0.7} dur={1.0} y={24}>
+            <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05, marginBottom: 32 }}>
+              Multidisciplinar.<br />
+              <span style={{ color: GN, fontSize: 52 }}>Especialistas onde importa.</span>
+            </div>
+          </Reveal>
+          <Reveal delay={1.6} dur={0.9}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px 20px' }}>
+              {['Automação Industrial', 'Engenharia de Minas', 'Engenharia Mineral', 'Ciência de Dados', 'Instrumentação', 'Sistemas Embarcados', 'IoT'].map((item, i) => (
+                <span key={item} style={{
+                  fontFamily: MONO, fontSize: 13, letterSpacing: '.1em',
+                  color: i === 0 ? GN : F3,
+                  padding: '6px 14px',
+                  border: `1px solid ${i === 0 ? 'rgba(25,226,122,.4)' : 'rgba(255,255,255,.1)'}`,
+                  borderRadius: 4, fontWeight: 600,
+                }}>
+                  {item.toUpperCase()}
+                </span>
+              ))}
+            </div>
+          </Reveal>
+          <Reveal delay={2.4} dur={0.9} y={12}>
+            <div style={{ fontSize: 18, color: F3, marginTop: 32, lineHeight: 1.6, maxWidth: 900 }}>
+              Com apoio da <strong style={{ color: F1 }}>FAPEMIG</strong>, parceria com o <strong style={{ color: F1 }}>Instituto Tecnológico Vale</strong> e testes validados na <strong style={{ color: F1 }}>CSN Casa de Pedra</strong>.
+            </div>
+          </Reveal>
+        </div>
+      </div>
+    </Scene>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CENA 10 — CTA (66 – 75s)
+// ═══════════════════════════════════════════════════════════════════════════════
+function C10CTA() {
+  return (
+    <Scene start={66} end={75} fadeIn={1.0} fadeOut={0.8}>
+      <div style={{ position: 'absolute', inset: 0, background: '#000', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 28 }}>
+        <Reveal delay={0.4} dur={1.0} y={20}>
+          <img src="../assets/logo.svg" style={{ width: 160, height: 160, display: 'block', margin: '0 auto' }} />
+        </Reveal>
+        <Reveal delay={1.0} dur={1.0} y={20} style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: 68, fontWeight: 800, letterSpacing: '-.025em', lineHeight: 1.05 }}>
+            Descarbonize sua mina.
+          </div>
+          <div style={{ fontSize: 26, color: F3, marginTop: 14, fontWeight: 400 }}>
+            Solicite uma demonstração técnica.
+          </div>
+        </Reveal>
+        <Reveal delay={1.7} dur={0.9} y={12}>
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: GN, color: '#0A0A0A', padding: '16px 32px', borderRadius: 4, fontWeight: 700, fontSize: 18, fontFamily: SANS }}>
               minedebug.com.br
             </div>
-          </Reveal>
-        </Sprite>
+            <div style={{ padding: '16px 24px', border: '1px solid rgba(255,255,255,.15)', borderRadius: 4, fontFamily: MONO, fontSize: 14, letterSpacing: '.06em', color: F3 }}>
+              minedebugltda@gmail.com
+            </div>
+          </div>
+        </Reveal>
+        <Reveal delay={2.2} dur={0.9}>
+          <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '.14em', color: 'rgba(255,255,255,.3)', marginTop: 8 }}>
+            OURO PRETO · MG · BRASIL
+          </div>
+        </Reveal>
       </div>
-    </Sprite>
+    </Scene>
   );
 }
 
-// === Progress bar (all scenes) ===
+// ═══════════════════════════════════════════════════════════════════════════════
+// Progress bar
+// ═══════════════════════════════════════════════════════════════════════════════
 function ProgressBar() {
   const t = useTime();
-  const p = clamp(t / 15, 0, 1);
+  const p = clamp(t / 75, 0, 1);
   return (
     <>
-      <div style={{ position: "absolute", left: 0, bottom: 0, height: 4, width: "100%", background: "rgba(255,255,255,.1)", zIndex: 10 }} />
-      <div style={{ position: "absolute", left: 0, bottom: 0, height: 4, width: `${p * 100}%`, background: "#19E27A", zIndex: 11 }} />
-      <div style={{ position: "absolute", top: 24, right: 32, fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: ".15em", color: "rgba(255,255,255,.5)", zIndex: 10 }}>
-        {String(Math.floor(t * 10) / 10).padStart(4, "0")}s / 15.0s
+      <div style={{ position: 'absolute', left: 0, bottom: 0, height: 3, width: '100%', background: 'rgba(255,255,255,.08)', zIndex: 10 }} />
+      <div style={{ position: 'absolute', left: 0, bottom: 0, height: 3, width: `${p * 100}%`, background: GN, zIndex: 11, transition: 'none' }} />
+      <div style={{ position: 'absolute', top: 20, right: 28, fontFamily: MONO, fontSize: 10, letterSpacing: '.14em', color: 'rgba(255,255,255,.4)', zIndex: 10 }}>
+        {String(Math.floor(t * 10) / 10).padStart(4, '0')}s / 75.0s
       </div>
-      <div style={{ position: "absolute", top: 24, left: 32, fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: ".15em", color: "rgba(255,255,255,.5)", zIndex: 10, display: "flex", alignItems: "center", gap: 8 }}>
-        <span style={{ width: 8, height: 8, borderRadius: 999, background: "#19E27A", boxShadow: "0 0 8px #19E27A" }} />
-        REC · MINEDEBUG INSTITUCIONAL
+      <div style={{ position: 'absolute', top: 20, left: 28, fontFamily: MONO, fontSize: 10, letterSpacing: '.14em', color: 'rgba(255,255,255,.4)', zIndex: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span style={{ width: 6, height: 6, borderRadius: 999, background: GN, boxShadow: `0 0 8px ${GN}`, display: 'inline-block' }} />
+        REC · MINEDEBUG INSTITUCIONAL 2026
       </div>
     </>
   );
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// Film
+// ═══════════════════════════════════════════════════════════════════════════════
 function Film() {
   return (
     <>
-      <SceneHook />
-      <SceneProblem />
-      <SceneStats />
-      <SceneCTA />
+      <C1Hook />
+      <C2Mercado />
+      <C3Problema />
+      <C4Solucao />
+      <C5Resultados />
+      <C6Financeiro />
+      <C7Modelo />
+      <C8Vantagens />
+      <C9Equipe />
+      <C10CTA />
       <ProgressBar />
     </>
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <Stage width={1920} height={1080} duration={15} background="#000" loop autoplay>
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <Stage width={1920} height={1080} duration={75} background="#000" loop autoplay>
     <Film />
   </Stage>
 );
