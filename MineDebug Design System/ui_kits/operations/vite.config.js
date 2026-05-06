@@ -65,7 +65,7 @@ function serveDesignSystem() {
 
 export default defineConfig({
   plugins: [react(), serveDesignSystem()],
-  base: './',
+  base: '/dashboard/',
   publicDir: resolve(ROOT, 'assets'),
   server: {
     fs: { allow: [ROOT] },
