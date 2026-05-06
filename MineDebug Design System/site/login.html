@@ -152,7 +152,7 @@
   togglePw.addEventListener('click', () => {
     const showing = pwInput.type === 'text';
     pwInput.type = showing ? 'password' : 'text';
-    togglePw.querySelector('i').setAttribute('data-lucide', showing ? 'eye' : 'eye-off');
+    togglePw.innerHTML = `<i data-lucide="${showing ? 'eye' : 'eye-off'}"></i>`;
     togglePw.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Ocultar senha');
     lucide.createIcons();
   });

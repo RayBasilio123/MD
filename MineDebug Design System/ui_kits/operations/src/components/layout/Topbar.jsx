@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { LogOut } from 'lucide-react'
 import { useToast } from '../../hooks/useToast.jsx'
+import logoSrc from '../../../../../assets/logo.svg'
 
 const NAV_ITEMS = [
   { id: 'operacoes',    label: 'Operações' },
@@ -28,7 +29,7 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <div className="topbar-brand">
-        <img src="/logo.svg" alt="" className="topbar-logo" />
+        <img src={logoSrc} alt="" className="topbar-logo" style={{borderRadius: '50%'}} />
         <div className="topbar-wordmark">MINE<span>DEBUG</span></div>
       </div>
       <nav className="topbar-nav">
