@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A **design system** for **MineDebug Technology** — a Brazilian industrial-mining tech company. The active design system lives under `minedebug/`. All output is static HTML/CSS; there is no build step except for the React dashboard in `minedebug/ui_kits/operations/`.
 
+> Product roadmap, SaaS/IoT architecture, and implementation backlog: see [`minedebug/ROADMAP.md`](minedebug/ROADMAP.md).
+
 To preview any static file, open it directly in a browser. The `preview/` cards and `site/` pages are standalone HTML files that import `colors_and_type.css` via a relative path.
 
 ## Skill
