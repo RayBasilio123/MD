@@ -1,5 +1,7 @@
 {
-  "buildCommand": "",
+  "buildCommand": null,
+  "outputDirectory": null,
+  "framework": null,
   "rewrites": [
     {
       "source": "/dashboard",
