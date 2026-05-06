@@ -1,14 +1,8 @@
 {
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/MineDebug%20Design%20System/site/index.html",
-      "permanent": false
-    },
+  "rewrites": [
     {
       "source": "/dashboard",
-      "destination": "/MineDebug%20Design%20System/ui_kits/operations/dist/index.html",
-      "permanent": false
+      "destination": "/MineDebug Design System/ui_kits/operations/dist/index.html"
     }
   ]
 }
