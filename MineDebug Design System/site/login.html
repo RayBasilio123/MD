@@ -172,7 +172,10 @@
       return;
     }
     sessionStorage.setItem('md-auth', JSON.stringify({ email, t: Date.now() }));
-    window.location.href = '../ui_kits/operations/index.html';
+    // Se estiver rodando localmente (file://) abre a pasta, se for servidor (ex: Vercel) vai pro app construído (dashboard)
+    window.location.href = window.location.protocol === 'file:' 
+      ? '../ui_kits/operations/index.html' 
+      : '/dashboard';
   });
 </script>
 </body>
