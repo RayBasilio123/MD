@@ -117,6 +117,34 @@ body { display: flex; flex-direction: column; color-scheme: dark; }
 .toast { background: var(--md-ink-700); border: 1px solid var(--md-ink-600); color: var(--md-ink-100); font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; padding: 10px 16px; border-radius: 6px; box-shadow: 0 12px 32px rgba(0,0,0,.55); opacity: 0; transform: translateY(8px); transition: opacity 200ms, transform 200ms; pointer-events: auto; }
 .toast.show { opacity: 1; transform: translateY(0); }
 
+/* ===== Responsive ===== */
+.sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 99; }
+.topbar-hamburger { display: none; background: transparent; border: 1px solid var(--md-ink-600); color: var(--md-ink-300); width: 32px; height: 32px; border-radius: 4px; cursor: pointer; align-items: center; justify-content: center; transition: all 120ms; flex-shrink: 0; margin-right: 4px; }
+.topbar-hamburger:hover { border-color: var(--md-green-500); color: var(--md-green-500); }
+
+@media (max-width: 1024px) {
+  .content { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { position: fixed; left: -240px; top: 0; bottom: 0; z-index: 100; transition: left 200ms ease; }
+  .sidebar.open { left: 0; box-shadow: 8px 0 32px rgba(0,0,0,.6); }
+  .topbar-nav { display: none; }
+  .topbar-hamburger { display: inline-flex; }
+  .metrics { grid-template-columns: repeat(2, 1fr); padding: 16px; gap: 12px; }
+  .content { padding: 12px 16px 24px; gap: 12px; }
+  .page-head { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+@media (max-width: 480px) {
+  .metrics { grid-template-columns: 1fr 1fr; }
+  .metric-value { font-size: 24px; }
+  .page-head .actions { width: 100%; }
+  .page-head .actions .btn { flex: 1; justify-content: center; }
+  .topbar-status .t-mono { display: none; }
+  .topbar-right { gap: 8px; }
+}
+
 /* Modal */
 .modal-overlay { position: fixed; inset: 0; background: rgba(10,10,10,.8); backdrop-filter: blur(8px); z-index: 1000; display: flex; align-items: center; justify-content: center; }
 .modal { background: var(--md-ink-800); border: 1px solid var(--md-ink-600); border-radius: 12px; padding: 32px; width: 480px; max-width: 90vw; }

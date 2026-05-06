@@ -10,6 +10,7 @@ import { METRICS } from './data/mock.js'
 
 function Dashboard() {
   const [diagOpen, setDiagOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   function exportar() {
     const rows = [
@@ -32,9 +33,10 @@ function Dashboard() {
 
   return (
     <>
-      <Topbar onExport={exportar} onDiag={() => setDiagOpen(true)} />
+      <Topbar onExport={exportar} onDiag={() => setDiagOpen(true)} onMenuToggle={() => setSidebarOpen(o => !o)} />
       <div className="shell">
-        <Sidebar />
+        {sidebarOpen && <div className="sidebar-overlay open" onClick={() => setSidebarOpen(false)} />}
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="main">
           <div className="page-head">
             <div>

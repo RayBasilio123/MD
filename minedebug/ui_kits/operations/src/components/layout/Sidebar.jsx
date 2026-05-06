@@ -26,7 +26,7 @@ const SECTIONS = [
   },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen }) {
   const [active, setActive] = useState('fleet')
   const showToast = useToast()
 
@@ -36,7 +36,7 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${isOpen ? ' open' : ''}`}>
       {SECTIONS.map(section => (
         <div key={section.label} className="sidebar-section">
           <div className="t-eyebrow sidebar-heading">{section.label}</div>

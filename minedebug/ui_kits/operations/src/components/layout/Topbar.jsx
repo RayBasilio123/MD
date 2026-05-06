@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LogOut } from 'lucide-react'
+import { LogOut, Menu } from 'lucide-react'
 import { useToast } from '../../hooks/useToast.jsx'
 import logoSrc from '../../../../../assets/logo.svg'
 
@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { id: 'configuracoes', label: 'Configurações' },
 ]
 
-export default function Topbar() {
+export default function Topbar({ onMenuToggle }) {
   const [activeNav, setActiveNav] = useState('operacoes')
   const showToast = useToast()
 
@@ -30,6 +30,9 @@ export default function Topbar() {
 
   return (
     <header className="topbar">
+      <button className="topbar-hamburger" onClick={onMenuToggle} aria-label="Menu">
+        <Menu size={16} />
+      </button>
       <div className="topbar-brand">
         <img src={logoSrc} alt="" className="topbar-logo" style={{borderRadius: '50%'}} />
         <div className="topbar-wordmark">MINE<span>DEBUG</span></div>
