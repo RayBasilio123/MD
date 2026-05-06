@@ -38,7 +38,7 @@
   .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--page-bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--page-border); }
   .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 64px; display: flex; align-items: center; gap: 32px; }
   .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
-  .nav-brand img { width: 32px; height: 32px; }
+  .nav-brand img { width: 32px; height: 32px; border-radius: 50%; }
   .nav-brand .wm { font-family: var(--font-mono); font-weight: 700; font-size: 15px; letter-spacing: .04em; }
   .nav-brand .wm span { color: var(--md-green-500); }
   .nav-links { display: flex; gap: 4px; flex: 1; }
@@ -108,7 +108,8 @@
   .team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
   .team-card { background: var(--page-card); border: 1px solid var(--page-border); border-radius: 8px; padding: 20px; transition: all 200ms; }
   .team-card:hover { border-color: var(--md-green-500); box-shadow: 0 8px 24px rgba(25,226,122,.08); }
-  .team-avatar { width: 56px; height: 56px; border-radius: 999px; background: linear-gradient(135deg, var(--md-green-500), var(--md-green-600)); color: var(--md-black); font-family: var(--font-mono); font-weight: 700; font-size: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .team-avatar { width: 56px; height: 56px; border-radius: 999px; background: var(--md-ink-700); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; flex-shrink: 0; }
+  .team-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
   .team-card h4 { font-size: 15px; font-weight: 700; margin: 0 0 4px; line-height: 1.3; }
   .team-role { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--md-green-600); font-weight: 600; margin-bottom: 12px; }
   [data-theme="dark"] .team-role { color: var(--md-green-500); }
@@ -140,13 +141,27 @@
   /* ===== Footer ===== */
   footer { background: var(--page-bg-2); border-top: 1px solid var(--page-border); padding: 48px 0 32px; }
   .footer-inner { max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; }
-  .footer-brand img { width: 36px; height: 36px; margin-bottom: 12px; }
+  .footer-brand img { width: 36px; height: 36px; margin-bottom: 12px; border-radius: 50%; }
   .footer-brand p { color: var(--page-fg-3); font-size: 13px; line-height: 1.6; max-width: 320px; }
   .footer-col h5 { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--page-fg-3); margin: 0 0 14px; font-weight: 600; }
   .footer-col a { display: block; color: var(--page-fg-2); font-size: 13px; text-decoration: none; padding: 4px 0; }
   .footer-col a:hover { color: var(--md-green-600); }
   [data-theme="dark"] .footer-col a:hover { color: var(--md-green-500); }
   .footer-bottom { max-width: 1200px; margin: 32px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--page-border); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--page-fg-3); letter-spacing: .04em; }
+
+  /* ===== Apoiadores ===== */
+  .apoio { background: var(--page-bg); border-top: 1px solid var(--page-border); border-bottom: 1px solid var(--page-border); padding: 72px 0; }
+  .apoio-head { text-align: center; margin-bottom: 48px; }
+  .apoio-head h2 { font-size: clamp(24px, 3vw, 36px); font-weight: 700; letter-spacing: -.02em; margin: 10px 0 12px; }
+  .apoio-head p { color: var(--page-fg-3); font-size: 15px; max-width: 480px; margin: 0 auto; line-height: 1.6; }
+  .apoio-logos { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 40px 56px; }
+  .apoio-item { display: flex; align-items: center; justify-content: center; transition: transform 200ms; }
+  .apoio-item:hover { transform: translateY(-2px); }
+  .apoio-item img { height: 52px; width: auto; object-fit: contain; display: block; filter: grayscale(100%) opacity(0.6); transition: filter 200ms; }
+  .apoio-item:hover img { filter: grayscale(0%) opacity(1); }
+  [data-theme="dark"] .apoio { background: var(--page-bg-2); }
+  [data-theme="dark"] .apoio-item img { filter: grayscale(100%) brightness(1.2) opacity(0.6); }
+  [data-theme="dark"] .apoio-item:hover img { filter: grayscale(0%) brightness(1) opacity(1); }
 
   @media (max-width: 900px) {
     .hero-inner, .section-head, .services, .mvv, .team-grid, .team-section .lead-row, .cta .container, .footer-inner { grid-template-columns: 1fr !important; }
@@ -209,22 +224,22 @@
     </div>
     <div class="services">
       <div class="svc">
-        <div class="svc-icon"><i data-lucide="leaf"></i></div>
+        <div class="svc-icon"><i data-lucide="fuel"></i></div>
         <span class="svc-tag">DESCARBONIZAÇÃO</span>
-        <h3>Redução de diesel & CO₂</h3>
-        <p>Sistemas de dosagem e otimização de combustão que reduzem consumo de diesel e emissões em caminhões fora-de-estrada e escavadeiras.</p>
+        <h3>Economize diesel</h3>
+        <p>Redução comprovada de <strong>10% a 15%</strong> no consumo de diesel em caminhões rodoviários, fora-de-estrada e escavadeiras, com sistema de dosagem e otimização de combustão embarcado.</p>
       </div>
       <div class="svc">
-        <div class="svc-icon"><i data-lucide="cpu"></i></div>
-        <span class="svc-tag">SISTEMAS EMBARCADOS</span>
-        <h3>Sensores & IoT industrial</h3>
-        <p>Hardware projetado para o ambiente de mina — vibração, poeira, calor — com telemetria em tempo real via gateway dedicado.</p>
+        <div class="svc-icon"><i data-lucide="zap"></i></div>
+        <span class="svc-tag">DESEMPENHO</span>
+        <h3>Mais desempenho</h3>
+        <p>Aumento de até <strong>30%</strong> na potência e desempenho do veículo, com combustão mais eficiente e resposta mais ágil do motor em condições de carga máxima.</p>
       </div>
       <div class="svc">
-        <div class="svc-icon"><i data-lucide="activity"></i></div>
-        <span class="svc-tag">MONITORAMENTO</span>
-        <h3>Painel de operações</h3>
-        <p>Dashboard de frota com consumo, status de sensores, alertas críticos e relatórios de redução de emissões para o time ESG.</p>
+        <div class="svc-icon"><i data-lucide="shield-check"></i></div>
+        <span class="svc-tag">DURABILIDADE</span>
+        <h3>Motor mais durável</h3>
+        <p>Limpeza interna contínua do motor, redução de desgaste por incrustação e menor necessidade de manutenção corretiva — mais disponibilidade para a operação.</p>
       </div>
     </div>
   </div>
@@ -278,28 +293,28 @@
     <div class="team-grid">
       <!-- Liderança -->
       <div class="team-card lead">
-        <div class="team-avatar">RB</div>
+        <div class="team-avatar"><img src="../assets/team/ray.png" alt="Ray Basílio"></div>
         <h4>Ray Basílio</h4>
         <div class="team-role" style="color:var(--md-green-500)">CEO &amp; CO-FOUNDER</div>
         <p class="team-bio">Lidera a estratégia da MineDebug e o relacionamento com mineradoras parceiras.</p>
         <a class="team-link" href="https://www.linkedin.com/in/ray-basilio/?locale=pt" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
       </div>
       <div class="team-card lead">
-        <div class="team-avatar">AK</div>
+        <div class="team-avatar"><img src="../assets/team/Alan.png" alt="Alan Kardek Rego Segundo"></div>
         <h4>Alan Kardek Rego Segundo</h4>
         <div class="team-role" style="color:var(--md-green-500)">CTO · DIRETOR DE TECNOLOGIA</div>
         <p class="team-bio">Responsável pela arquitetura de sistemas embarcados e roadmap técnico.</p>
         <a class="team-link" href="https://www.linkedin.com/in/alan-kardek-rego-segundo-224ba21b9/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
       </div>
       <div class="team-card lead">
-        <div class="team-avatar">EP</div>
+        <div class="team-avatar"><img src="../assets/team/erica.png" alt="Erica Pinto"></div>
         <h4>Erica Pinto</h4>
         <div class="team-role" style="color:var(--md-green-500)">COO · DIRETORA DE OPERAÇÕES</div>
         <p class="team-bio">Coordena instalação em campo, operação e suporte aos clientes mineradores.</p>
         <a class="team-link" href="https://www.linkedin.com/in/erica-pinto-01244571/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
       </div>
       <div class="team-card lead">
-        <div class="team-avatar">CA</div>
+        <div class="team-avatar"><img src="../assets/team/carlos.png" alt="Carlos Enrique Arroyo Ortiz"></div>
         <h4>Carlos Enrique Arroyo Ortiz</h4>
         <div class="team-role" style="color:var(--md-green-500)">DIRETOR DE P&amp;D</div>
         <p class="team-bio">Lidera pesquisa aplicada em descarbonização e processos minerários.</p>
@@ -307,34 +322,52 @@
       </div>
 
       <!-- Engenharia / Inovação -->
-      <div class="team-card">
-        <div class="team-avatar">AG</div>
+      <div class="team-card lead">
+        <div class="team-avatar"><img src="../assets/team/Alex.png" alt="Alex Júnior Guimarães"></div>
         <h4>Alex Júnior Guimarães</h4>
         <div class="team-role">ENG. DE SISTEMAS EMBARCADOS</div>
         <p class="team-bio">Desenvolve firmware e hardware dos sensores instalados em equipamentos pesados.</p>
         <a class="team-link" href="https://www.linkedin.com/in/alex-j%C3%BAnior-guimar%C3%A3es-aaa34b203/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
       </div>
-      <div class="team-card">
-        <div class="team-avatar">ID</div>
+      <div class="team-card lead">
+        <div class="team-avatar"><img src="../assets/team/iuri.png" alt="Iuri Diniz"></div>
         <h4>Iuri Diniz</h4>
         <div class="team-role">ENG. DE INOVAÇÃO &amp; IoT</div>
         <p class="team-bio">Trabalha em integração IoT, gateways de campo e plataforma de telemetria.</p>
         <a class="team-link" href="https://www.linkedin.com/in/iuri-s-diniz/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
       </div>
-      <div class="team-card">
-        <div class="team-avatar">RF</div>
+      <div class="team-card lead">
+        <div class="team-avatar"><img src="../assets/team/robson.png" alt="Robson Figueiredo"></div>
         <h4>Robson Figueiredo</h4>
         <div class="team-role">ENG. DE CAMPO &amp; AUTOMAÇÃO</div>
         <p class="team-bio">Conduz instalações em mina, comissionamento e validação de equipamentos em operação.</p>
         <a class="team-link" href="https://www.linkedin.com/in/robson-figueiredo-2b565872/" target="_blank" rel="noopener"><i data-lucide="linkedin"></i>LinkedIn</a>
       </div>
-      <div class="team-card" style="background:transparent;border-style:dashed">
-        <div class="team-avatar" style="background:var(--page-bg-2);color:var(--page-fg-3)"><i data-lucide="user-plus" style="width:20px;height:20px"></i></div>
-        <h4 style="color:var(--page-fg-3)">Junte-se ao time</h4>
-        <div class="team-role" style="color:var(--page-fg-3)">VAGAS ABERTAS</div>
+      <div class="team-card lead">
+        <div class="team-avatar"><i data-lucide="user-plus" style="width:20px;height:20px"></i></div>
+        <h4>Junte-se ao time</h4>
+        <div class="team-role">VAGAS ABERTAS</div>
         <p class="team-bio">Buscamos engenheiros de hardware, firmware e dados apaixonados por mineração e descarbonização.</p>
         <a class="team-link" href="#contato"><i data-lucide="arrow-right"></i>Ver oportunidades</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="apoio" id="apoiadores">
+  <div class="container">
+    <div class="apoio-head">
+      <span class="eyebrow">APOIADORES E PARCEIROS</span>
+      <h2>Quem acredita na MineDebug</h2>
+      <p>Instituições que apoiam o desenvolvimento de tecnologia industrial brasileira aplicada à mineração.</p>
+    </div>
+    <div class="apoio-logos">
+      <div class="apoio-item"><img src="../assets/apoio/puro.png"     alt="PURO"></div>
+      <div class="apoio-item"><img src="../assets/apoio/vale.png"     alt="Instituto Tecnológico Vale"></div>
+      <div class="apoio-item"><img src="../assets/apoio/fapemig.png"  alt="FAPEMIG"></div>
+      <div class="apoio-item"><img src="../assets/apoio/incultec.png" alt="incultec"></div>
+      <div class="apoio-item"><img src="../assets/apoio/ufop.png"     alt="UFOP"></div>
+      <div class="apoio-item"><img src="../assets/apoio/csn.png"      alt="CSN"></div>
     </div>
   </div>
 </section>
@@ -363,7 +396,7 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <img src="../assets/logo.svg" alt="">
-      <p>MineDebug Technology — sistemas embarcados, IoT e descarbonização para mineração de grande porte.</p>
+      <p>MineDebug Technology — sistemas embarcados, IoT e descarbonização para mineração de pequeno a grande porte.</p>
     </div>
     <div class="footer-col">
       <h5>Produto</h5>

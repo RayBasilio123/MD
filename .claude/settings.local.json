@@ -4,7 +4,13 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\rayba\\\\Music\\\\Analista\\\\MD\\\\.sixth\" -Force -Recurse | ForEach-Object { $_.FullName })",
       "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\rayba\\\\Music\\\\Analista\\\\MD\\\\.sixth\\\\skills\" -Force -Recurse | ForEach-Object { $_.FullName })",
       "Bash(git -C \"/c/Users/rayba/Music/Analista/MD\" log --oneline)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "PowerShell(Get-Process *)",
+      "Bash(python -c \"from PIL import Image; print\\('Pillow OK'\\)\")",
+      "Bash(python split_logos.py)",
+      "Bash(Remove-Item *)"
     ]
   }
 }

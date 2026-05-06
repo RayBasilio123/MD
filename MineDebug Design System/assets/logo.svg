@@ -2,10 +2,13 @@
   <defs>
     <path id="topArc" d="M 60 200 A 140 140 0 0 1 340 200" fill="none"></path>
     <path id="bottomArc" d="M 60 200 A 140 140 0 0 0 340 200" fill="none"></path>
+    <clipPath id="circleClip">
+      <circle cx="200" cy="200" r="200"></circle>
+    </clipPath>
   </defs>
 
-  
-  <rect width="400" height="400" fill="#0A0A0A"></rect>
+  <g clip-path="url(#circleClip)">
+  <circle cx="200" cy="200" r="200" fill="#0A0A0A"></circle>
 
   
   <g>
@@ -81,5 +84,6 @@
     </g>
     
     <line x1="0" y1="-6" x2="0" y2="12" stroke="#0A0A0A" stroke-width="1.2"></line>
+  </g>
   </g>
 </svg>
