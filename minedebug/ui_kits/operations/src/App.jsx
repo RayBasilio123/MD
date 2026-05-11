@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Topbar from './components/layout/Topbar.jsx'
 import Sidebar from './components/layout/Sidebar.jsx'
 import MetricCard from './components/dashboard/MetricCard.jsx'
@@ -13,6 +13,16 @@ function Dashboard() {
   const [diagOpen, setDiagOpen] = useState(false)
   const [videoOpen, setVideoOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [theme, setTheme] = useState(() => localStorage.getItem('md-dash-theme') || 'dark')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem('md-dash-theme', theme)
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme(t => t === 'dark' ? 'light' : 'dark')
+  }
 
   function exportar() {
     const rows = [
@@ -35,7 +45,7 @@ function Dashboard() {
 
   return (
     <>
-      <Topbar onExport={exportar} onDiag={() => setDiagOpen(true)} onMenuToggle={() => setSidebarOpen(o => !o)} />
+      <Topbar onExport={exportar} onDiag={() => setDiagOpen(true)} onMenuToggle={() => setSidebarOpen(o => !o)} theme={theme} onThemeToggle={toggleTheme} />
       <div className="shell">
         {sidebarOpen && <div className="sidebar-overlay open" onClick={() => setSidebarOpen(false)} />}
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} onVideoClick={() => setVideoOpen(true)} />

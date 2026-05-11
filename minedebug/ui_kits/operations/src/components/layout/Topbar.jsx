@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { LogOut, Menu } from 'lucide-react'
+import { LogOut, Menu, Sun, Moon } from 'lucide-react'
 import { useToast } from '../../hooks/useToast.jsx'
 import logoSrc from '../../../../../assets/logo.svg'
 
@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { id: 'configuracoes', label: 'Configurações' },
 ]
 
-export default function Topbar({ onMenuToggle }) {
+export default function Topbar({ onMenuToggle, theme, onThemeToggle }) {
   const [activeNav, setActiveNav] = useState('operacoes')
   const showToast = useToast()
 
@@ -54,6 +54,9 @@ export default function Topbar({ onMenuToggle }) {
           <span className="dot dot-ok" />
           <span className="t-mono">SISTEMA · OK</span>
         </div>
+        <button className="topbar-theme-toggle" onClick={onThemeToggle} title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}>
+          {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+        </button>
         <button className="topbar-logout" onClick={logout} title="Sair do painel">
           <LogOut size={16} />
         </button>
