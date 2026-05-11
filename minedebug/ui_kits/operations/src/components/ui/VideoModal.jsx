@@ -29,7 +29,7 @@ export default function VideoModal({ open, onClose }) {
         <video 
           controls 
           autoPlay 
-          src="/video/institucional-15s.mp4" 
+          src="/minedebug/video/institucional-15s.mp4"
           style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover' }}
         />
       </div>

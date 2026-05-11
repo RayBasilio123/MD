@@ -4,6 +4,10 @@
   "framework": null,
   "rewrites": [
     {
+      "source": "/video/:path*",
+      "destination": "/minedebug/video/:path*"
+    },
+    {
       "source": "/dashboard",
       "destination": "/minedebug/ui_kits/operations/dist/index.html"
     },
